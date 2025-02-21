@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --color-background-light: #F9FAFB;
+    --color-background-dark: #1F2937;
+    
+    --color-heading-light: #111827;
+    --color-heading-dark: #F9FAFB;
+    
+    --color-subheading-light: #374151;
+    --color-subheading-dark: #D1D5DB;
+    
+    --color-paragraph-light: #4B5563;
+    --color-paragraph-dark: #9CA3AF;
+  }
+  
