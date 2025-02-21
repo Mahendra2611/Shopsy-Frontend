@@ -1,11 +1,13 @@
 @import "tailwindcss";
-
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
     --color-background-light: #F9FAFB;
     --color-background-dark: #1F2937;
+
     
+    --color-dark-bg-end: oklch(10% 0 0); /* Black */
+
     --color-heading-light: #111827;
     --color-heading-dark: #F9FAFB;
     
