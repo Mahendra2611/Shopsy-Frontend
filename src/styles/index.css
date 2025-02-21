@@ -16,5 +16,7 @@
     
     --color-paragraph-light: #4B5563;
     --color-paragraph-dark: #9CA3AF;
+
+    --breakpoint-sml:400px
   }
   

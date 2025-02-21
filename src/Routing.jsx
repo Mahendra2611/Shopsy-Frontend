@@ -17,19 +17,20 @@ const Routing = () => {
                     path:"/",
                     element:<Home/>,
                     errorElement:<Error/>
+                },
+                {
+                    path:"/login",
+                    element:<Login/>,
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/signup",
+                    element:<Signup/>,
+                    errorElement:<Error/>
                 }
             ]
         },
-        {
-            path:"/login",
-            element:<Login/>,
-            errorElement:<Error/>
-        },
-        {
-            path:"/signup",
-            element:<Signup/>,
-            errorElement:<Error/>
-        }
+       
     ])
   return (
     <RouterProvider router={BrowserRouter}/>

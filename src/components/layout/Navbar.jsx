@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Menu, X } from "lucide-react"; // X for close button
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-    const [darkMode, setDarkMode] = useState(
-        localStorage.getItem("theme") === "dark"
-    );
-
+    const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+    const [menuOpen, setMenuOpen] = useState(false); // Track menu state
 
     useEffect(() => {
         if (darkMode) {
@@ -28,7 +25,7 @@ const Navbar = () => {
             </Link>
 
             {/* Buttons */}
-            <div className="flex items-center gap-4">
+            <div className="hidden sml:flex items-center gap-4">
                 {/* Theme Toggle */}
                 <button
                     onClick={() => setDarkMode(!darkMode)}
@@ -44,7 +41,7 @@ const Navbar = () => {
                             Dashboard
                         </Link>
                         <button
-                            onClick={() => setIsLoggedIn(false)} // Replace with logout logic
+                            onClick={() => setIsLoggedIn(false)}
                             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                         >
                             Logout
@@ -52,8 +49,10 @@ const Navbar = () => {
                     </>
                 ) : (
                     <>
-                        <Link to="/login"
-                            className="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
+                        <Link
+                            to="/login"
+                            className="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                        >
                             Login
                         </Link>
                         <Link
@@ -65,6 +64,68 @@ const Navbar = () => {
                     </>
                 )}
             </div>
+
+            {/* Hamburger Menu (Visible on small screens) */}
+            <div className="sml:hidden">
+                <button onClick={() => setMenuOpen(!menuOpen)} className="p-2 dark:text-white">
+                    {menuOpen ? <X size={24} /> : <Menu size={24} />}
+                </button>
+            </div>
+
+            {/* Dropdown Menu for small screens */}
+            {menuOpen && (
+                <div className="absolute top-14 right-4 bg-white dark:bg-gray-800 shadow-lg rounded-lg p-4 flex flex-col gap-3 sml:hidden">
+                    {/* Theme Toggle */}
+                    <button
+                        onClick={() => {
+                            setDarkMode(!darkMode);
+                            setMenuOpen(false); // Close menu after click
+                        }}
+                        className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                    >
+                        {darkMode ? <Sun className="text-yellow-400" /> : <Moon className="text-gray-900" />}
+                    </button>
+
+                    {/* Auth Buttons */}
+                    {isLoggedIn ? (
+                        <>
+                            <Link
+                                to="/dashboard"
+                                onClick={() => setMenuOpen(false)}
+                                className="text-paragraph-light dark:text-paragraph-dark"
+                            >
+                                Dashboard
+                            </Link>
+                            <button
+                                onClick={() => {
+                                    setIsLoggedIn(false);
+                                    setMenuOpen(false);
+                                }}
+                                className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+                            >
+                                Logout
+                            </button>
+                        </>
+                    ) : (
+                        <>
+                            <Link
+                                to="/login"
+                                onClick={() => setMenuOpen(false)}
+                                className="px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                            >
+                                Login
+                            </Link>
+                            <Link
+                                to="/signup"
+                                onClick={() => setMenuOpen(false)}
+                                className="px-3 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 transition"
+                            >
+                                Sign Up
+                            </Link>
+                        </>
+                    )}
+                </div>
+            )}
         </nav>
     );
 };
