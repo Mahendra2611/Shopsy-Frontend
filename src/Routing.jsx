@@ -6,7 +6,11 @@ import Error from './pages/Error'
 import Home from './pages/Home'
 import Login from './components/auth/Login'
 import Signup from './components/auth/Signup'
+import RegisterShop from './pages/RegisterShop'
+import Dashboard from './pages/Dashboard'
+import AddProducts from './pages/AddProducts'
 const Routing = () => {
+    
     const BrowserRouter  = createBrowserRouter([
         {
             path:"/",
@@ -27,11 +31,27 @@ const Routing = () => {
                     path:"/signup",
                     element:<Signup/>,
                     errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard",
+                    element:<Dashboard/>,
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/addProducts",
+                    element:<AddProducts/>,
+                    errorElement:<Error/>
                 }
             ]
         },
+        {
+            path:"/registerShop",
+            element:<RegisterShop/>,
+            errorElement:<Error/>
+        }
        
     ])
+   
   return (
     <RouterProvider router={BrowserRouter}/>
   )

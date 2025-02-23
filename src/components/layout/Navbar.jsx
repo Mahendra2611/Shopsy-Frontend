@@ -1,13 +1,23 @@
 import { useState, useEffect } from "react";
 import { Sun, Moon, Menu, X } from "lucide-react"; // X for close button
 import { Link } from "react-router-dom";
+import {useSelector,useDispatch} from "react-redux"
+import { removeOwner } from "../../redux/AuthSlice";
+import { useNavigate } from "react-router-dom";
+import useAPI from "../../hooks/useAPI";
 
 const Navbar = () => {
     const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false); // Track menu state
-
+    const {name,email} = useSelector((state)=>state.auth)
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+   
+    const {callApi,loading,error} = useAPI();
+  
     useEffect(() => {
+       
         if (darkMode) {
             document.documentElement.classList.add("dark");
             localStorage.setItem("theme", "dark");
@@ -16,9 +26,30 @@ const Navbar = () => {
             localStorage.setItem("theme", "light");
         }
     }, [darkMode]);
-
+   
+    useEffect(()=>{
+       
+        if(name != "" && email != "")setIsLoggedIn(true);
+        else setIsLoggedIn(false);
+    },[name,email])
+    const logout = async()=>{
+      
+        setIsLoggedIn(false)
+       
+        dispatch(removeOwner())
+      
+        navigate("/")
+       
+        const response = await callApi({
+            url:"api/ownerAuth/logout",
+        method:"GET",
+        header:{"Content-Type":"application/josn"}
+        })
+      
+    }
+   
     return (
-        <nav className="sticky top-0 flex items-center justify-between p-4 border-b-2 border-b-cyan-900 dark:border-b-cyan-50 bg-background-light dark:bg-background-dark shadow-md">
+        <nav className="sticky top-0  z-50 flex items-center justify-between p-4 border-b-2 border-b-cyan-900 dark:border-b-cyan-50 bg-background-light dark:bg-background-dark shadow-md">
             {/* Logo */}
             <Link to="/" className="text-xl font-bold text-heading-light dark:text-heading-dark">
                 ShopEase
@@ -41,7 +72,7 @@ const Navbar = () => {
                             Dashboard
                         </Link>
                         <button
-                            onClick={() => setIsLoggedIn(false)}
+                            onClick={logout}
                             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                         >
                             Logout

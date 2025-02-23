@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
-    console.log("called")
+    
+   
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col">
       {/* Hero Section */}
