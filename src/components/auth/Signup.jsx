@@ -78,9 +78,9 @@ const Signup = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input type="text" placeholder="Name" value={formData.name} onChange={handleChange} />
-          <Input type="email" placeholder="Email" value={formData.email} onChange={handleChange} />
-          <Input type="password" placeholder="Password" value={formData.password} onChange={handleChange} />
+          <Input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
+          <Input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
+          <Input type="password" name="password" placeholder="Password" value={formData.password} onChange={handleChange} />
 
           <button
   type="submit"

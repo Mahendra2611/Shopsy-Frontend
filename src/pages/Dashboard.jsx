@@ -1,15 +1,17 @@
 import { Package, ShoppingCart, Hourglass, DollarSign } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import { useSelector } from "react-redux";
 const Dashboard = () => {
   const navigate = useNavigate();
+  const {shopDetails} = useSelector((state)=>state.shop)
+  console.log(shopDetails)
   return (
     <div className="min-h-screen px-1 sml:p-6 bg-background-light dark:bg-background-dark">
     <div className="max-w-5xl mx-auto bg-card-light dark:bg-card-dark shadow-2xl rounded-2xl p-8">
       <h2 className="text-3xl font-extrabold text-heading-light dark:text-heading-dark mb-6 text-center">
         Shop Dashboard
       </h2>
-  
+    
       <div className="flex flex-col md:flex-row gap-6 mb-8">
         <button className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-indigo-600 hover:to-blue-500 text-white py-3 rounded-lg shadow-lg transition-all">
           Manage Products
@@ -27,7 +29,7 @@ const Dashboard = () => {
   <div className=" bg-gradient-to-br from-blue-500 to-blue-700 dark:from-blue-600 dark:to-blue-800 text-white p-6 rounded-xl shadow-lg transform hover:scale-105 transition-all flex items-center justify-between">
     <div>
       <h3 className="text-lg font-semibold">Total Products</h3>
-      <p className="text-3xl font-extrabold mt-2">24</p>
+      <p className="text-3xl font-extrabold mt-2">{shopDetails?.items?.length || 0}</p>
     </div>
     <Package className="w-12 h-12 text-white opacity-80" />
   </div>

@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addOwner } from "../../redux/AuthSlice";
 import { FaEnvelope, FaLock } from "react-icons/fa"; // Import icons
+import { addShopDetails } from "../../redux/ShopSlice";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -73,14 +75,15 @@ const Login = () => {
       data: formData,
       headers: { "Content-Type": "application/json" },
     });
-
+    console.log(response)
     if (response) {
       console.log("Login Successful:", response);
       dispatch(addOwner({ name: response.name, email: response.email }));
+      dispatch(addShopDetails(response.shopDetails))
       navigate("/dashboard");
     } else {
       console.error("Login Failed:", error);
-      alert(error || "Login Failed!");
+      toast.error("Login failed")
     }
   };
 
@@ -99,7 +102,7 @@ const Login = () => {
               <Input
                 type="email"
                 placeholder="Email"
-                
+                name="email"
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -116,7 +119,7 @@ const Login = () => {
               
               <Input
                 type="password"
-              
+              name="password"
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}

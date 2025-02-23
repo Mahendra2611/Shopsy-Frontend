@@ -3,7 +3,10 @@ import { UploadCloud } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AiOutlineTag, AiOutlineDollar, AiOutlineNumber, AiOutlineInbox } from "react-icons/ai";
 import useAPI from "../hooks/useAPI";
+import toast from "react-hot-toast";
 import Input from "../components/common/Input";
+import { useSelector,useDispatch } from "react-redux";
+import { addShopDetails } from "../redux/ShopSlice";
 
 const AddProducts = () => {
   const [formData, setFormData] = useState({
@@ -14,16 +17,18 @@ const AddProducts = () => {
     image: null,
     newCategory: "",
   });
-
-  const [categories, setCategories] = useState(["Electronics", "Clothing", "Home Appliances", "Accessories", "Books"]);
-  const { callApi } = useAPI();
+  const {shopDetails} = useSelector((state)=>state.shop)
+  const [categories, setCategories] = useState(shopDetails.itemsCategories||[]);
+  const { callApi ,loading,error} = useAPI();
   const navigate = useNavigate();
-
+  const {shop} = useSelector((state)=>state.shop)
+  const dispatch = useDispatch();
+  //console.log(shop)
   const handleChange = (e) => {
-    console.log(e.target.value)
+    //console.log(e.target)
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
+  //console.log(formData)
   const handleFileChange = (e) => {
     setFormData({ ...formData, image: e.target.files[0] });
   };
@@ -51,18 +56,21 @@ const AddProducts = () => {
 
     try {
       const response = await callApi({
-        url: "api/products/addProduct",
+        url: `api/items/${shop._id}/items`,
         method: "POST",
         data: formDataToSend,
       });
 
       console.log("Product added:", response);
       if (response) {
+        dispatch(addShopDetails(response.shopDetails));
         navigate("/dashboard");
       } else {
+        toast.error("Error while adding product")
         console.log("Error while adding product");
       }
     } catch (err) {
+        toast.error("Error while adding product")
       console.error("Error adding product:", err);
     }
   };
@@ -159,15 +167,20 @@ const AddProducts = () => {
           <label className="flex flex-col items-center border-2 border-dashed rounded-lg p-4 w-full max-w-xs mx-auto sm:max-w-none hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
             <UploadCloud className="w-10 h-10 text-gray-500 dark:text-gray-400" />
             <p className="text-sm text-gray-600 dark:text-gray-300">Upload product image</p>
-            <input type="file" name="image" onChange={handleFileChange} className="hidden" />
+            <input type="file" name="image" onChange={handleFileChange} className="text-black dark:text-white" />
           </label>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded-md"
+            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 flex justify-center items-center"
+            disabled={loading}
           >
-            Add Product
+            {loading ? (
+              <svg className="animate-spin h-5 w-5 mr-2 border-4 border-white border-t-transparent rounded-full" />
+            ) : (
+              "Add Product"
+            )}
           </button>
         </form>
       </div>

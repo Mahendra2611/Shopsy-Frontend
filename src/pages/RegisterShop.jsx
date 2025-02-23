@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import useAPI from '../hooks/useAPI';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaStore, FaMapMarkerAlt, FaList, FaImage } from "react-icons/fa"; // Import icons
-
+import { useDispatch } from 'react-redux';
+import { addShop } from '../redux/ShopSlice';
+import toast from 'react-hot-toast';
 const RegisterShop = () => {
   const [formData, setFormData] = useState({
     ownerName: '',
@@ -11,7 +13,7 @@ const RegisterShop = () => {
     address: '',
     image: null,
   });
-
+ const dispatch = useDispatch();
   const { callApi, loading } = useAPI();
   const navigate = useNavigate();
 
@@ -41,11 +43,14 @@ const RegisterShop = () => {
 
       console.log("Shop registered:", response);
       if (response) {
+        dispatch(addShop(response.shop))
         navigate("/dashboard");
       } else {
         console.log("Error while registering");
+        toast.error("Error registering shop")
       }
     } catch (err) {
+      toast.error("Error registering shop")
       console.error("Error registering shop:", err);
     }
   };
