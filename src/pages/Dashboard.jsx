@@ -1,6 +1,8 @@
 import { Package, ShoppingCart, Hourglass, DollarSign } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen px-1 sml:p-6 bg-background-light dark:bg-background-dark">
     <div className="max-w-5xl mx-auto bg-card-light dark:bg-card-dark shadow-2xl rounded-2xl p-8">
@@ -15,7 +17,7 @@ const Dashboard = () => {
         <button className="flex-1 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-emerald-600 hover:to-green-500 text-white py-3 rounded-lg shadow-lg transition-all">
           View Orders
         </button>
-        <button className="flex-1 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-pink-600 hover:to-purple-500 text-white py-3 rounded-lg shadow-lg transition-all">
+        <button onClick={()=>navigate("/addProducts")} className="flex-1 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-pink-600 hover:to-purple-500 text-white py-3 rounded-lg shadow-lg transition-all">
           Add Product
         </button>
       </div>
