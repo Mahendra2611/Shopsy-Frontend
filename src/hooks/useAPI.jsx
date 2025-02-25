@@ -18,9 +18,7 @@ const useAPI = () => {
                 headers,
                 withCredentials: true
             });
-            if (response?.status >= 400) {
-                console.error("Error Response:", response);
-            } 
+            
 console.log(response)
            if(response && (response.status === 201||response.status === 200)) return response.data
            else return null; // Return the response data

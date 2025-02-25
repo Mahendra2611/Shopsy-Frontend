@@ -1,10 +1,12 @@
 import { Package, ShoppingCart, Hourglass, DollarSign } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
 const Dashboard = () => {
   const navigate = useNavigate();
   const {shopDetails} = useSelector((state)=>state.shop)
   console.log(shopDetails)
+  
   return (
     <div className="min-h-screen px-1 sml:p-6 bg-background-light dark:bg-background-dark">
     <div className="max-w-5xl mx-auto bg-card-light dark:bg-card-dark shadow-2xl rounded-2xl p-8">

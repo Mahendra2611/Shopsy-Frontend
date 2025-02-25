@@ -1,42 +1,52 @@
-import React, { useState } from "react";
-import { UploadCloud } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { UploadCloud, Mic, MicOff } from "lucide-react";
+import { AiOutlineTag, AiOutlineDollar, AiOutlineNumber, AiOutlineInbox, AiOutlinePercentage, AiOutlineShop } from "react-icons/ai";
+import { MdOutlinePriceChange, MdOutlineCategory } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { AiOutlineTag, AiOutlineDollar, AiOutlineNumber, AiOutlineInbox } from "react-icons/ai";
 import useAPI from "../hooks/useAPI";
 import toast from "react-hot-toast";
 import Input from "../components/common/Input";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { addShopDetails } from "../redux/ShopSlice";
 
 const AddProducts = () => {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
-    price: "",
+    salesPrice: "",
+    costPrice: "",
     quantity: "",
     image: null,
+    discount: "",
     newCategory: "",
   });
-  const {shopDetails} = useSelector((state)=>state.shop)
-  const [categories, setCategories] = useState(shopDetails.itemsCategories||[]);
-  const { callApi ,loading,error} = useAPI();
+
+  const { shopDetails } = useSelector((state) => state.shop);
+  const [categories, setCategories] = useState(shopDetails.itemsCategories || []);
+  const { callApi, loading } = useAPI();
   const navigate = useNavigate();
-  const {shop} = useSelector((state)=>state.shop)
+  const { shop } = useSelector((state) => state.shop);
   const dispatch = useDispatch();
-  //console.log(shop)
+  const [listening, setListening] = useState(false);
+  const [currentField, setCurrentField] = useState(null);
+  const recognitionRef = useRef(null);
+
+  // Handle input change
   const handleChange = (e) => {
-    //console.log(e.target)
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  //console.log(formData)
+
+  // Handle file change
   const handleFileChange = (e) => {
     setFormData({ ...formData, image: e.target.files[0] });
   };
 
+  // Handle category selection
   const handleCategoryChange = (e) => {
     setFormData({ ...formData, category: e.target.value });
   };
 
+  // Handle adding a new category
   const handleAddCategory = () => {
     if (formData.newCategory.trim() && !categories.includes(formData.newCategory.trim())) {
       setCategories([...categories, formData.newCategory.trim()]);
@@ -44,6 +54,7 @@ const AddProducts = () => {
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -61,28 +72,59 @@ const AddProducts = () => {
         data: formDataToSend,
       });
 
-      console.log("Product added:", response);
       if (response) {
         dispatch(addShopDetails(response.shopDetails));
         navigate("/dashboard");
       } else {
-        toast.error("Error while adding product")
-        console.log("Error while adding product");
+        toast.error("Error while adding product");
       }
     } catch (err) {
-        toast.error("Error while adding product")
-      console.error("Error adding product:", err);
+      toast.error("Error while adding product");
     }
+  };
+
+  // Start voice recognition
+  const startListening = (field) => {
+    if (!("webkitSpeechRecognition" in window)) {
+      toast.error("Speech recognition not supported in this browser");
+      return;
+    }
+
+    setCurrentField(field);
+    setListening(true);
+
+    recognitionRef.current = new window.webkitSpeechRecognition();
+    recognitionRef.current.lang = "en-US";
+    recognitionRef.current.continuous = false;
+    recognitionRef.current.interimResults = false;
+
+    recognitionRef.current.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setFormData((prev) => ({ ...prev, [field]: prev[field] + " " + transcript }));
+    };
+
+    recognitionRef.current.onend = () => {
+      setListening(false);
+    };
+
+    recognitionRef.current.start();
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900 p-4">
+      {/* Mic Status Indicator */}
+      {listening && (
+        <div className="fixed top-16 right-5 bg-red-500 text-white p-2 rounded-full shadow-lg flex items-center">
+          <Mic className="w-6 h-6" />
+        </div>
+      )}
+
       <div className="w-full max-w-2xl bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
         <h2 className="text-center text-2xl font-bold text-gray-800 dark:text-white mb-4">Add a New Product</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Product Name */}
           <div className="relative">
-            {/* <AiOutlineTag className="absolute left-3 top-3 text-gray-500 dark:text-gray-300" /> */}
+          
             <Input
               type="text"
               name="name"
@@ -90,6 +132,7 @@ const AddProducts = () => {
               value={formData.name}
               onChange={handleChange}
               className="pl-10"
+              onFocus={() => startListening("name")}
             />
           </div>
 
@@ -97,7 +140,7 @@ const AddProducts = () => {
           <div>
             <label className="block text-gray-700 dark:text-gray-300 mb-1">Category</label>
             <div className="relative">
-              {/* <AiOutlineInbox className="absolute left-3 top-3 text-gray-500 dark:text-gray-300" /> */}
+             
               <select
                 name="category"
                 value={formData.category}
@@ -113,45 +156,36 @@ const AddProducts = () => {
                 ))}
               </select>
             </div>
-
-            {/* Add New Category */}
-            <div className="flex gap-2 mt-2">
-              <div className="relative flex-grow">
-                {/* <AiOutlineInbox className="absolute left-3 top-3 text-gray-500 dark:text-gray-300" /> */}
-                <Input
-                  type="text"
-                  name="newCategory"
-                  placeholder="New Category"
-                  value={formData.newCategory}
-                  onChange={handleChange}
-                  className="pl-10"
-                />
-              </div>
-              <button
-                type="button"
-                onClick={handleAddCategory}
-                className="px-4 py-1 bg-green-600 hover:bg-green-700 text-white rounded-md"
-              >
-                Add
-              </button>
-            </div>
           </div>
 
-          {/* Price & Quantity */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Price, Cost Price & Quantity */}
+          <div className="grid grid-cols-3 gap-4">
             <div className="relative">
-              {/* <AiOutlineDollar className="absolute left-3 top-3 text-gray-500 dark:text-gray-300" /> */}
+            
               <Input
                 type="number"
-                name="price"
-                placeholder="Price"
-                value={formData.price}
+                name="salesPrice"
+                placeholder="Sales Price"
+                value={formData.salesPrice}
                 onChange={handleChange}
                 className="pl-10"
+                onFocus={() => startListening("salesPrice")}
               />
             </div>
             <div className="relative">
-              {/* //<AiOutlineNumber className="absolute left-3 top-3 text-gray-500 dark:text-gray-300" /> */}
+            
+              <Input
+                type="number"
+                name="costPrice"
+                placeholder="Cost Price"
+                value={formData.costPrice}
+                onChange={handleChange}
+                className="pl-10"
+                onFocus={() => startListening("costPrice")}
+              />
+            </div>
+            <div className="relative">
+             
               <Input
                 type="number"
                 name="quantity"
@@ -159,28 +193,28 @@ const AddProducts = () => {
                 value={formData.quantity}
                 onChange={handleChange}
                 className="pl-10"
+                onFocus={() => startListening("quantity")}
               />
             </div>
           </div>
 
-          {/* Image Upload */}
-          <label className="flex flex-col items-center border-2 border-dashed rounded-lg p-4 w-full max-w-xs mx-auto sm:max-w-none hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-            <UploadCloud className="w-10 h-10 text-gray-500 dark:text-gray-400" />
-            <p className="text-sm text-gray-600 dark:text-gray-300">Upload product image</p>
-            <input type="file" name="image" onChange={handleFileChange} className="text-black dark:text-white" />
-          </label>
+          {/* Discount */}
+          <div className="relative">
+           
+            <Input
+              type="number"
+              name="discount"
+              placeholder="Discount %"
+              value={formData.discount}
+              onChange={handleChange}
+              className="pl-10"
+              onFocus={() => startListening("discount")}
+            />
+          </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 flex justify-center items-center"
-            disabled={loading}
-          >
-            {loading ? (
-              <svg className="animate-spin h-5 w-5 mr-2 border-4 border-white border-t-transparent rounded-full" />
-            ) : (
-              "Add Product"
-            )}
+          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600 flex justify-center items-center">
+            {loading ? "Adding..." : "Add Product"}
           </button>
         </form>
       </div>

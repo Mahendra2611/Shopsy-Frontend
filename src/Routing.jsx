@@ -9,6 +9,7 @@ import Signup from './components/auth/Signup'
 import RegisterShop from './pages/RegisterShop'
 import Dashboard from './pages/Dashboard'
 import AddProducts from './pages/AddProducts'
+import Analytics from './pages/Analytics'
 const Routing = () => {
     
     const BrowserRouter  = createBrowserRouter([
@@ -40,6 +41,11 @@ const Routing = () => {
                 {
                     path:"/addProducts",
                     element:<AddProducts/>,
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/analytics",
+                    element:<Analytics/>,
                     errorElement:<Error/>
                 }
             ]
