@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { UploadCloud, Mic, MicOff, Loader2 } from "lucide-react";
 const Input = ({type,placeholder,value,onChange,name}) => {
   return (
     <div>
@@ -20,3 +20,14 @@ const Input = ({type,placeholder,value,onChange,name}) => {
 }
 
 export default Input
+
+export const  InputWithVoice = ({ name, icon, placeholder, value, onChange, startListening, listening, currentField }) => (
+  <div className="relative flex">
+    {icon && <span className="absolute left-3 top-3 text-gray-500 dark:text-gray-300">{icon}</span>}
+    <Input type="text" name={name} placeholder={placeholder} value={value} onChange={onChange} className="pl-10" />
+    <button type="button" className="ml-2 bg-blue-500 text-white px-3 py-2 rounded-md" onClick={() => startListening(name)}>
+      {listening && currentField === name ? <MicOff /> : <Mic />}
+    </button>
+  </div>
+);
+

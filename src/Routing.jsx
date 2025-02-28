@@ -30,7 +30,7 @@ const Routing = () => {
                 },
                 {
                     path:"/signup",
-                    element:<Signup/>,
+                    element:<RegisterShop/>,
                     errorElement:<Error/>
                 },
                 {
@@ -49,11 +49,6 @@ const Routing = () => {
                     errorElement:<Error/>
                 }
             ]
-        },
-        {
-            path:"/registerShop",
-            element:<RegisterShop/>,
-            errorElement:<Error/>
         }
        
     ])
