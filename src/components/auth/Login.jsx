@@ -4,49 +4,46 @@ import useAPI from "../../hooks/useAPI";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addOwner } from "../../redux/AuthSlice";
-import { FaEnvelope, FaLock } from "react-icons/fa"; // Import icons
 import { addShopDetails } from "../../redux/ShopSlice";
 import toast from "react-hot-toast";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: "",
+    identifier: "", // Holds either email or mobile number
     password: "",
   });
 
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
+  const [errors, setErrors] = useState({ identifier: "", password: "" });
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { callApi, loading, error } = useAPI();
 
   // Email validation function
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  // Mobile number validation function (10-digit Indian numbers)
+  const validateMobile = (mobile) => /^[6-9]\d{9}$/.test(mobile);
 
   // Password validation function (min length 6)
-  const validatePassword = (password) => {
-    return password.length >= 6;
-  };
+  const validatePassword = (password) => password.length >= 6;
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
 
-    // Live validation
-    if (e.target.name === "email") {
+    if (name === "identifier") {
       setErrors((prev) => ({
         ...prev,
-        email: validateEmail(e.target.value) ? "" : "Invalid email format",
+        identifier:
+          validateEmail(value) || validateMobile(value)
+            ? ""
+            : "Enter a valid email or mobile number",
       }));
-    } else if (e.target.name === "password") {
+    } else if (name === "password") {
       setErrors((prev) => ({
         ...prev,
-        password: validatePassword(e.target.value)
+        password: validatePassword(value)
           ? ""
           : "Password must be at least 6 characters",
       }));
@@ -56,12 +53,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const { identifier, password } = formData;
+
     // Final validation check before submitting
-    if (!validateEmail(formData.email)) {
-      setErrors((prev) => ({ ...prev, email: "Invalid email format" }));
+    if (!validateEmail(identifier) && !validateMobile(identifier)) {
+      setErrors((prev) => ({
+        ...prev,
+        identifier: "Enter a valid email or mobile number",
+      }));
       return;
     }
-    if (!validatePassword(formData.password)) {
+
+    if (!validatePassword(password)) {
       setErrors((prev) => ({
         ...prev,
         password: "Password must be at least 6 characters",
@@ -69,21 +72,27 @@ const Login = () => {
       return;
     }
 
+    // Determine whether identifier is an email or mobile number
+    const requestData = {
+      email: validateEmail(identifier) ? identifier : undefined,
+      mobileNumber: validateMobile(identifier) ? identifier : undefined,
+      password,
+    };
+
     const response = await callApi({
       url: "api/ownerAuth/login",
       method: "POST",
-      data: formData,
+      data: requestData,
       headers: { "Content-Type": "application/json" },
     });
-    console.log(response)
-    if (response) {
-      console.log("Login Successful:", response);
+
+    if (response?.success) {
+      toast.success("Login successful!");
       dispatch(addOwner({ name: response.name, email: response.email }));
-      dispatch(addShopDetails(response.shopDetails))
+      dispatch(addShopDetails(response.shopDetails));
       navigate("/dashboard");
     } else {
-      console.error("Login Failed:", error);
-      toast.error("Login failed")
+      toast.error(response?.message || "Login failed");
     }
   };
 
@@ -95,43 +104,37 @@ const Login = () => {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Email Input with Icon */}
+          {/* Email or Mobile Input */}
           <div>
-            
-             
-              <Input
-                type="email"
-                placeholder="Email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-          
-            {errors.email && (
-              <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+            <Input
+              type="text"
+              placeholder="Email or Mobile Number"
+              name="identifier"
+              value={formData.identifier}
+              onChange={handleChange}
+              required
+            />
+            {errors.identifier && (
+              <p className="text-red-500 text-sm mt-1">{errors.identifier}</p>
             )}
           </div>
 
-          {/* Password Input with Icon */}
+          {/* Password Input */}
           <div>
-           
-              
-              <Input
-                type="password"
+            <Input
+              type="password"
               name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-           
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
             )}
           </div>
 
-          {/* Login Button with Loading State */}
+          {/* Login Button */}
           <button
             type="submit"
             className="w-full flex items-center justify-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-md transition disabled:bg-gray-400"
