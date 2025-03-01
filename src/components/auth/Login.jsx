@@ -4,7 +4,6 @@ import useAPI from "../../hooks/useAPI";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addOwner } from "../../redux/AuthSlice";
-import { addShopDetails } from "../../redux/ShopSlice";
 import toast from "react-hot-toast";
 
 const Login = () => {

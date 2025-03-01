@@ -90,6 +90,7 @@ const Dashboard = () => {
           <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4 rounded-lg shadow-lg">
             <h3 className="text-sm md:text-lg font-semibold">Total Products</h3>
             <p className="text-2xl font-bold">{shopDetails?.items?.length || 0}</p>
+            <button className="mt-2 text-yellow-900 bg-white px-3 py-1 rounded-md" onClick={() => navigate("/dashboard/product")}>View Products</button>
           </div>
           <div className="bg-gradient-to-r from-yellow-500 to-orange-600 text-white p-4 rounded-lg shadow-lg">
             <h3 className="text-sm md:text-lg font-semibold">Low Stock Items</h3>

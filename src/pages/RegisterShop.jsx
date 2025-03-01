@@ -3,9 +3,8 @@ import useAPI from '../hooks/useAPI';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaStore, FaMapMarkerAlt, FaList, FaImage, FaMicrophone } from "react-icons/fa";
 import { useDispatch } from 'react-redux';
-import { addShop } from '../redux/ShopSlice';
 import toast from 'react-hot-toast';
-
+import { addOwner } from '../redux/AuthSlice';
 const RegisterShop = () => {
   const [formData, setFormData] = useState({
     shopName: '',
@@ -90,7 +89,7 @@ const RegisterShop = () => {
       });
 
       if (response) {
-        dispatch(addShop(response.shop));
+        dispatch(addOwner(response.shop));
         navigate("/dashboard");
       } else {
         toast.error("Error registering shop");

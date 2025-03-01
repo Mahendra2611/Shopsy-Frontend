@@ -10,6 +10,7 @@ import RegisterShop from './pages/RegisterShop'
 import Dashboard from './pages/Dashboard'
 import AddProducts from './pages/AddProducts'
 import Analytics from './pages/Analytics'
+import Products from './components/dashboard/Products'
 const Routing = () => {
     
     const BrowserRouter  = createBrowserRouter([
@@ -46,6 +47,11 @@ const Routing = () => {
                 {
                     path:"/analytics",
                     element:<Analytics/>,
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard/products",
+                    element:<Products/>,
                     errorElement:<Error/>
                 }
             ]
