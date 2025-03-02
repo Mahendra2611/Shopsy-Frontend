@@ -1,70 +1,84 @@
-import { useState } from "react";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { Sun, Moon, ShoppingCart, DollarSign, TrendingUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import { FaChartLine, FaShoppingCart, FaRupeeSign } from "react-icons/fa";
+import useAPI from "../hooks/useAPI";
+import { useParams } from "react-router-dom";
 
-const data = [
-  { month: "Jan", sales: 12000, profit: 5000 },
-  { month: "Feb", sales: 15000, profit: 6000 },
-  { month: "Mar", sales: 18000, profit: 7500 },
-  { month: "Apr", sales: 21000, profit: 9000 },
-  { month: "May", sales: 25000, profit: 11000 },
-];
+const Analytics = () => {
+  const [analytics, setAnalytics] = useState(null);
+  const {shopId} = useParams();
+const {callApi} = useAPI();
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        const response = await callApi({
+          url: `api/analytics/${shopId}`,
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+        setAnalytics(response.data);
+      } catch (error) {
+        console.error("Failed to fetch analytics", error);
+      }
+    };
+    fetchAnalytics();
+  }, [shopId]);
 
-export default function Analytics() {
-  
+  if (!analytics) {
+    return <p className="text-center text-gray-500">Loading analytics...</p>;
+  }
 
   return (
-    <div className="dark:bg-gray-900 dark:text-white bg-white text-gray-900 min-h-screen p-6 transition-all">
-      {/* Toggle Dark Mode */}
-      {/* <button 
-        onClick={() => setDarkMode(!darkMode)}
-        className="p-2 rounded-md bg-gray-200 dark:bg-gray-800 transition-all"
-      >
-        {darkMode ? <Sun className="w-6 h-6 text-yellow-400" /> : <Moon className="w-6 h-6 text-gray-900" />}
-      </button> */}
-
-      <h1 className="text-2xl font-semibold mt-4">Sales & Profit Analytics</h1>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-        <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center space-x-4">
-          <ShoppingCart className="w-10 h-10 text-blue-500" />
+    <div className="p-6 max-w-4xl mx-auto">
+      <h2 className="text-2xl font-bold mb-4 text-gray-800">Shop Analytics</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Total Quantity Sold */}
+        <div className="bg-blue-500 text-white p-4 rounded-lg shadow-md flex items-center gap-3">
+          <FaShoppingCart size={28} />
           <div>
-            <p className="text-lg font-semibold">Total Sales</p>
-            <p className="text-2xl font-bold">₹ 92,000</p>
+            <p className="text-sm">Total Quantity Sold</p>
+            <h3 className="text-lg font-semibold">{analytics.totalQuantitySold}</h3>
           </div>
         </div>
-
-        <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center space-x-4">
-          <DollarSign className="w-10 h-10 text-green-500" />
+        {/* Total Profit */}
+        <div className="bg-green-500 text-white p-4 rounded-lg shadow-md flex items-center gap-3">
+          <FaRupeeSign size={28} />
           <div>
-            <p className="text-lg font-semibold">Total Profit</p>
-            <p className="text-2xl font-bold">₹ 39,500</p>
+            <p className="text-sm">Total Profit</p>
+            <h3 className="text-lg font-semibold">₹{analytics.totalProfit}</h3>
           </div>
         </div>
-
-        <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center space-x-4">
-          <TrendingUp className="w-10 h-10 text-yellow-500" />
+        {/* Sales Trend */}
+        <div className="bg-purple-500 text-white p-4 rounded-lg shadow-md flex items-center gap-3">
+          <FaChartLine size={28} />
           <div>
-            <p className="text-lg font-semibold">Best-Selling Month</p>
-            <p className="text-2xl font-bold">May (₹ 25,000)</p>
+            <p className="text-sm">Total Sales Days</p>
+            <h3 className="text-lg font-semibold">{analytics.dailyStats.length}</h3>
           </div>
         </div>
       </div>
-
-      {/* Bar Chart */}
-      <div className="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg mt-6">
-        <h2 className="text-xl font-semibold">Monthly Sales & Profit</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={data} className="mt-4">
-            <XAxis dataKey="month"  />
-            <YAxis  />
-            <Tooltip />
-            <Bar dataKey="sales" fill="#3b82f6" />
-            <Bar dataKey="profit" fill="#22c55e" />
-          </BarChart>
-        </ResponsiveContainer>
+      {/* Sales Data Table */}
+      <div className="mt-6 bg-white shadow-md rounded-lg overflow-hidden">
+        <table className="w-full text-left">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="py-2 px-4">Date</th>
+              <th className="py-2 px-4">Quantity Sold</th>
+              <th className="py-2 px-4">Profit</th>
+            </tr>
+          </thead>
+          <tbody>
+            {analytics.dailyStats.map((day, index) => (
+              <tr key={index} className="border-t">
+                <td className="py-2 px-4">{new Date(day.date).toLocaleDateString()}</td>
+                <td className="py-2 px-4">{day.quantitySold}</td>
+                <td className="py-2 px-4">₹{day.profit}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
-}
+};
+
+export default Analytics;

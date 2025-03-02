@@ -5,11 +5,12 @@ const useAPI = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
    
-    const callApi = async ({ url, method = "GET", data = null, headers = {} }) => {
+    const callApi = async ({ url, method = "GET", data = {}, headers = {} }) => {
         setLoading(true);
         setError(null);
        
         url = `http://localhost:3000/${url}`
+        console.log(url)
         try {
             const response = await axios({
                 url,
@@ -18,7 +19,7 @@ const useAPI = () => {
                 headers,
                 withCredentials: true
             });
-            
+
 console.log(response)
            if(response && (response.status === 201||response.status === 200)) return response.data
            else return null; // Return the response data

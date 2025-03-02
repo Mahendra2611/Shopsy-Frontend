@@ -2,17 +2,15 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const AuthSlice = createSlice({
     name:"auth",
-    initialState:{name:"",email:""},
+    initialState:{owner:{}},
     reducers:{
         addOwner:(state,action)=>{
             console.log("add owner")
-            state.name = action.payload.name,
-            state.email = action.payload.email
+           state.owner = action.payload
         },
         removeOwner:(state)=>{
             console.log("remove owner")
-            state.name = "",
-            state.email = ""
+           state.owner = {}
         }
     }
 })

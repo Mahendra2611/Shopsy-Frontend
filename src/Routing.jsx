@@ -9,6 +9,9 @@ import Signup from './components/auth/Signup'
 import RegisterShop from './pages/RegisterShop'
 import Dashboard from './pages/Dashboard'
 import AddProducts from './pages/AddProducts'
+import Products from './components/dashboard/Products'
+import ProductDetails from './components/dashboard/ProductDetails'
+import UpdateProduct from './components/dashboard/UpdateProduct'
 import Analytics from './pages/Analytics'
 const Routing = () => {
     
@@ -30,7 +33,7 @@ const Routing = () => {
                 },
                 {
                     path:"/signup",
-                    element:<Signup/>,
+                    element:<RegisterShop/>,
                     errorElement:<Error/>
                 },
                 {
@@ -47,13 +50,27 @@ const Routing = () => {
                     path:"/analytics",
                     element:<Analytics/>,
                     errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard/products",
+                    element:<Products/>,
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard/products/details/:productId",
+                    element:<ProductDetails/>,
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard/products/update/:productId",
+                    element:<UpdateProduct/>,
+                    errorElement:<Error/>
+                },{
+                    path:"/dashboard/analytics/:shopId",
+                   element:<Analytics/>,
+                   errorElement:<Error/>
                 }
             ]
-        },
-        {
-            path:"/registerShop",
-            element:<RegisterShop/>,
-            errorElement:<Error/>
         }
        
     ])
