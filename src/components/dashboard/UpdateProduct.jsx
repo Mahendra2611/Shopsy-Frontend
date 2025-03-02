@@ -1,19 +1,32 @@
+import { updateProduct } from "../../redux/ProductSlice";
 import React, { useState } from "react";
-import useAPI from "../hooks/useAPI";
-import { useNavigate } from "react-router-dom";
+import useAPI from "../../hooks/useAPI";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaImage, FaMicrophone } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
-const AddProduct = () => {
+
+
+const UpdateProduct = () => {
+
+    const categorizedProducts = useSelector((state) => state.products.products);
+    const {productId }= useParams()
+  let product = null;
+  Object.values(categorizedProducts).forEach((category) => {
+    const foundProduct = category.find((item) => item._id === productId);
+    if (foundProduct) product = foundProduct;
+  });
+
   const [formData, setFormData] = useState({
-    name: "",
-    category: "",
-    salesPrice: "",
-    costPrice: "",
-    weight: "",
-    quantity: "",
-    lowStockThreshold: "",
-    discount: "",
+    name: product?.name ||"",
+    category:product?.category || "",
+    salesPrice: product?.salesPrice ||"",
+    costPrice: product?.costPrice ||"",
+    weight: product?.weight ||"",
+    quantity: product?.quantity ||"",
+    lowStockThreshold: product?.lowStockThreshold ||"",
+    discount: product?.discount ||"",
     image: null,
   });
 
@@ -53,19 +66,20 @@ const AddProduct = () => {
 
     try {
       const response = await callApi({
-        url: "api/product/add",
-        method: "POST",
+        url: `api/product/update/${productId}`,
+        method: "PUT",
         data: formDataToSend,
       });
 
       if (response) {
-        toast.success("Product added successfully!");
+        dispatch(updateProduct(response.product));
+        toast.success("Product updated successfully!");
         navigate("/dashboard");
       } else {
-        toast.error("Error adding product");
+        toast.error("Error updating product");
       }
     } catch (err) {
-      toast.error("Error adding product");
+      toast.error("Error updating product");
     }
   };
 
@@ -74,8 +88,11 @@ const AddProduct = () => {
       <div className="w-full max-w-md p-4 sm:p-8 bg-white dark:bg-gray-800 shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold text-center mb-6 text-black dark:text-white">Add Product</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-        {["name", "salesPrice", "costPrice", "weight", "quantity", "lowStockThreshold", "discount"].map((field, index) => (
+        {["name ", "salesPrice", "costPrice", "weight", "quantity", "lowStockThreshold", "discount"].map((field, index) => (
+   
   <div key={index} className="flex items-center border rounded p-2 bg-gray-100 dark:bg-gray-700">
+    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{field.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}</label>
+    <br/>
     <input
       type="text"
       name={field}
@@ -97,14 +114,14 @@ const AddProduct = () => {
     name="category"
     value={formData.category}
     onChange={handleChange}
-    className="w-full bg-transparent outline-none text-black dark:text-white"
+    className="w-full bg-transparent outline-none text-black dark:text-white "
     required
   >
-    <option value="">Select Category</option>
-    <option value="grocery">Grocery</option>
-    <option value="electronics">Electronics</option>
-    <option value="clothing">Clothing</option>
-    <option value="accessories">Accessories</option>
+    <option value="" className="text-black">Select Category</option>
+    <option value="grocery" className="text-black">Grocery</option>
+    <option value="electronics" className="text-black">Electronics</option>
+    <option value="clothing" className="text-black">Clothing</option>
+    <option value="accessories" className="text-black">Accessories</option>
   </select>
 </div>
 
@@ -125,7 +142,7 @@ const AddProduct = () => {
             {loading ? (
               <svg className="animate-spin h-5 w-5 mr-2 border-4 border-white border-t-transparent rounded-full" />
             ) : (
-              "Add Product"
+              "Update Product"
             )}
           </button>
         </form>
@@ -134,4 +151,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default UpdateProduct;

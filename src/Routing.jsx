@@ -11,6 +11,8 @@ import Dashboard from './pages/Dashboard'
 import AddProducts from './pages/AddProducts'
 import Analytics from './pages/Analytics'
 import Products from './components/dashboard/Products'
+import ProductDetails from './components/dashboard/ProductDetails'
+import UpdateProduct from './components/dashboard/UpdateProduct'
 const Routing = () => {
     
     const BrowserRouter  = createBrowserRouter([
@@ -52,6 +54,16 @@ const Routing = () => {
                 {
                     path:"/dashboard/products",
                     element:<Products/>,
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard/products/details/:productId",
+                    element:<ProductDetails/>,
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard/products/update/:productId",
+                    element:<UpdateProduct/>,
                     errorElement:<Error/>
                 }
             ]
