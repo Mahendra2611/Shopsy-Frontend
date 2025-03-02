@@ -30,7 +30,7 @@ const Dashboard = () => {
       <span>Orders</span>
     </li>
     
-    <li className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-blue-500" onClick={() => navigate("/dashboard/analytics")}>
+    <li className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-blue-500" onClick={() => navigate("/dashboard/analytics/65d8c8e2a4f3b6b4c8a54321")}>
       <BarChart size={20} className="text-gray-600 dark:text-gray-300" />
       <span>Analytics</span>
     </li>
