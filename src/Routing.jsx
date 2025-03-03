@@ -13,6 +13,8 @@ import Products from './components/dashboard/Products'
 import ProductDetails from './components/dashboard/ProductDetails'
 import UpdateProduct from './components/dashboard/UpdateProduct'
 import Analytics from './pages/Analytics'
+import Orders from './components/orders/Orders'
+import OrderDetails from './components/orders/OrderDetails'
 const Routing = () => {
     
     const BrowserRouter  = createBrowserRouter([
@@ -65,10 +67,21 @@ const Routing = () => {
                     path:"/dashboard/products/update/:productId",
                     element:<UpdateProduct/>,
                     errorElement:<Error/>
-                },{
+                },
+                {
                     path:"/dashboard/analytics/:shopId",
                    element:<Analytics/>,
                    errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard/orders",
+                    element:<Orders/>,
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard/orders/details/:orderId",
+                    element:<OrderDetails/>,
+                    errorElement:<Error/>
                 }
             ]
         }

@@ -6,6 +6,7 @@ const AuthSlice = createSlice({
     reducers:{
         addOwner:(state,action)=>{
             console.log("add owner")
+            state.owner = {};
            state.owner = action.payload
         },
         removeOwner:(state)=>{
