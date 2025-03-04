@@ -51,7 +51,7 @@ const Signup = () => {
     console.log("Form Data:", formData);
   
     const response = await callApi({
-      url: "api/ownerAuth/signup",
+      url: "api/owner/register",
       method: "POST",
       data: formData,
       headers: { "Content-Type": "application/json" },

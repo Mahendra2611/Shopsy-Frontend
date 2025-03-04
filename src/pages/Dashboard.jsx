@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { Package, ShoppingCart, BarChart, AlertTriangle, User, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+
+
 
 const Dashboard = () => {
   const navigate = useNavigate();
   
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  
+ 
 
   return (
     <div className="flex min-h-screen bg-background-light dark:bg-background-dark">

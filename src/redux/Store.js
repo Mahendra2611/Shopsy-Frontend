@@ -6,9 +6,9 @@ import authReducer from "./AuthSlice";
 import productReducer from "./ProductSlice"
 import orderReducer from "./OrderSlice"
 import sessionStorage from "redux-persist/lib/storage/session";
+import lowStockReducer from "./LowStockSlice"
 
-
-const persistConfig = { key: "root", storage: sessionStorage };
+const persistConfig = { key: "auth", storage, };
 
 
 // Combine reducers
@@ -16,6 +16,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   products: productReducer,
   orders:orderReducer,
+  lowStock:lowStockReducer,
 });
 
 // Wrap rootReducer with persistReducer

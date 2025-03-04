@@ -15,7 +15,7 @@ const RegisterShop = () => {
     password: '',
     shopCategory: '',
     itemCategories: '',
-    shopImage: null,
+   
     shopLocation: { type: 'Point', coordinates: [0, 0] },
   });
 
@@ -52,9 +52,9 @@ const RegisterShop = () => {
     }
   };
   
-  const handleFileChange = (e) => {
-    setFormData((prev) => ({ ...prev, shopImage: e.target.files[0] }));
-  };
+  // const handleFileChange = (e) => {
+  //   setFormData((prev) => ({ ...prev, shopImage: e.target.files[0] }));
+  // };
 
   const validateForm = () => {
     if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
@@ -71,7 +71,7 @@ const RegisterShop = () => {
     }
     return true;
   };
-
+ // console.log(formData)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -80,16 +80,16 @@ const RegisterShop = () => {
     Object.entries(formData).forEach(([key, value]) => {
       formDataToSend.append(key, value);
     });
-
+    console.log(formData)
     try {
       const response = await callApi({
         url: "api/owner/register",
         method: "POST",
-        data: formDataToSend
+        data: formData
       });
 
       if (response) {
-        dispatch(addOwner(response.shop));
+        dispatch(addOwner(response.owner));
         navigate("/dashboard");
       } else {
         toast.error("Error registering shop");
@@ -179,11 +179,11 @@ const RegisterShop = () => {
 
 
           {/* File Upload */}
-          <label className="flex items-center cursor-pointer bg-gray-200 dark:bg-gray-600 p-2 rounded justify-center">
+          {/* <label className="flex items-center cursor-pointer bg-gray-200 dark:bg-gray-600 p-2 rounded justify-center">
             <FaImage className="text-gray-600 dark:text-white mr-2" />
             <span className="text-gray-700 dark:text-white">Upload Shop Image</span>
             <input type="file" name="shopImage" onChange={handleFileChange} className="hidden" required />
-          </label>
+          </label> */}
 
           {/* Submit Button */}
           <button

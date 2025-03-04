@@ -5,7 +5,7 @@ import App from './App'
 import Error from './pages/Error'
 import Home from './pages/Home'
 import Login from './components/auth/Login'
-import Signup from './components/auth/Signup'
+
 import RegisterShop from './pages/RegisterShop'
 import Dashboard from './pages/Dashboard'
 import AddProducts from './pages/AddProducts'
@@ -15,6 +15,8 @@ import UpdateProduct from './components/dashboard/UpdateProduct'
 import Analytics from './pages/Analytics'
 import Orders from './components/orders/Orders'
 import OrderDetails from './components/orders/OrderDetails'
+import Profile from './pages/Profile'
+import AccountSetting from './pages/AccountSetting'
 const Routing = () => {
     
     const BrowserRouter  = createBrowserRouter([
@@ -81,6 +83,16 @@ const Routing = () => {
                 {
                     path:"/dashboard/orders/details/:orderId",
                     element:<OrderDetails/>,
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard/profile",
+                    element:<Profile/>,
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard/settings",
+                    element:<AccountSetting/>,
                     errorElement:<Error/>
                 }
             ]

@@ -32,7 +32,7 @@ const orderSlice = createSlice({
             return order._id != _id;
         })
       }
-      else{
+      else if(status === "Delivered"){
         state.orders["Accepted"] = state.orders["Accepted"].filter((order)=>{
             return order._id != _id;
         })

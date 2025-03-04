@@ -10,7 +10,7 @@ const Navbar = () => {
     const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false); // Track menu state
-    const {name,email} = useSelector((state)=>state.auth)
+    const {ownerName,email} = useSelector((state)=>state?.auth?.owner || "")
     const dispatch = useDispatch();
     const navigate = useNavigate();
    
@@ -29,24 +29,29 @@ const Navbar = () => {
    
     useEffect(()=>{
        
-        if(name != "" && email != "")setIsLoggedIn(true);
+        if(ownerName != "" && email != "")setIsLoggedIn(true);
         else setIsLoggedIn(false);
-    },[name,email])
-    const logout = async()=>{
-      
-        setIsLoggedIn(false)
-       
-        dispatch(removeOwner())
-      
-        navigate("/")
-       
+    },[ownerName,email])
+
+    const logout = async () => {
+        console.log("logged out");
+        // Clear Redux and LocalStorage
+        dispatch(removeOwner());
+        localStorage.removeItem("persist:auth"); 
+    
+        // Navigate first to avoid async issues
+        navigate("/");
+    
+        // Call API for logout
         const response = await callApi({
-            url:"api/ownerAuth/logout",
-        method:"GET",
-        header:{"Content-Type":"application/josn"}
-        })
-      
-    }
+            url: "api/ownerAuth/logout",
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+    
+        console.log("Logout Response:", response);
+    };
+    
    
     return (
         <nav className="sticky top-0  z-50 flex items-center justify-between p-4 border-b-2 border-b-cyan-900 dark:border-b-cyan-50 bg-background-light dark:bg-background-dark shadow-md">
