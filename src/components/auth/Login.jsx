@@ -88,7 +88,10 @@ const Login = () => {
     if (response) {
       toast.success("Login successful!");
       console.log(response)
-      dispatch(addOwner(response.owner));
+      const owner = {"email":response.owner.email,"name":response.owner.ownerName}
+      console.log(owner);
+      localStorage.setItem("owner", JSON.stringify(owner));
+      dispatch(addOwner(owner));
      
       navigate("/dashboard");
     } else {

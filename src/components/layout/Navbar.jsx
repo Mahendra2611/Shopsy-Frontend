@@ -10,10 +10,11 @@ const Navbar = () => {
     const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false); // Track menu state
-    const {ownerName,email} = useSelector((state)=>state?.auth?.owner || "")
+    const { email, name } = useSelector((state) => state?.auth?.owner || {});
     const dispatch = useDispatch();
     const navigate = useNavigate();
-   
+   console.log(email)
+   console.log(name)
     const {callApi,loading,error} = useAPI();
   
     useEffect(() => {
@@ -29,16 +30,16 @@ const Navbar = () => {
    
     useEffect(()=>{
        
-        if(ownerName != "" && email != "")setIsLoggedIn(true);
+        if(name != "" && email != "")setIsLoggedIn(true);
         else setIsLoggedIn(false);
-    },[ownerName,email])
+    },[name,email])
 
     const logout = async () => {
         console.log("logged out");
-        // Clear Redux and LocalStorage
+        setIsLoggedIn(false);
+        setMenuOpen(false);
         dispatch(removeOwner());
-        localStorage.removeItem("persist:auth"); 
-    
+       
         // Navigate first to avoid async issues
         navigate("/");
     
@@ -133,10 +134,9 @@ const Navbar = () => {
                                 Dashboard
                             </Link>
                             <button
-                                onClick={() => {
-                                    setIsLoggedIn(false);
-                                    setMenuOpen(false);
-                                }}
+                                onClick={
+                                    logout
+                                }
                                 className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                             >
                                 Logout

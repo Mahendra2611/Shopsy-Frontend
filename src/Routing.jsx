@@ -16,7 +16,9 @@ import Analytics from './pages/Analytics'
 import Orders from './components/orders/Orders'
 import OrderDetails from './components/orders/OrderDetails'
 import Profile from './pages/Profile'
-import AccountSetting from './pages/AccountSetting'
+import PublicRoute from './components/auth/PublicRoute'
+import ProtectedRoute from './components/auth/ProtectedRoute'
+
 const Routing = () => {
     
     const BrowserRouter  = createBrowserRouter([
@@ -27,72 +29,67 @@ const Routing = () => {
             children:[
                 {
                     path:"/",
-                    element:<Home/>,
+                    element:(<PublicRoute><Home/></PublicRoute>),
                     errorElement:<Error/>
                 },
                 {
                     path:"/login",
-                    element:<Login/>,
+                    element:(<PublicRoute><Login/></PublicRoute>),
                     errorElement:<Error/>
                 },
                 {
                     path:"/signup",
-                    element:<RegisterShop/>,
+                    element:(<PublicRoute><RegisterShop/></PublicRoute>),
                     errorElement:<Error/>
                 },
                 {
                     path:"/dashboard",
-                    element:<Dashboard/>,
+                    element:(<ProtectedRoute><Dashboard/></ProtectedRoute>),
                     errorElement:<Error/>
                 },
                 {
                     path:"/addProducts",
-                    element:<AddProducts/>,
+                    element:<ProtectedRoute><AddProducts/></ProtectedRoute>,
                     errorElement:<Error/>
                 },
                 {
                     path:"/analytics",
-                    element:<Analytics/>,
+                    element:(<ProtectedRoute><Analytics/></ProtectedRoute>),
                     errorElement:<Error/>
                 },
                 {
                     path:"/dashboard/products",
-                    element:<Products/>,
+                    element:(<ProtectedRoute><Products/></ProtectedRoute>),
                     errorElement:<Error/>
                 },
                 {
                     path:"/dashboard/products/details/:productId",
-                    element:<ProductDetails/>,
+                    element:(<ProtectedRoute><ProductDetails/></ProtectedRoute>),
                     errorElement:<Error/>
                 },
                 {
                     path:"/dashboard/products/update/:productId",
-                    element:<UpdateProduct/>,
+                    element:(<ProtectedRoute><UpdateProduct/></ProtectedRoute>),
                     errorElement:<Error/>
                 },
                 {
                     path:"/dashboard/analytics/:shopId",
-                   element:<Analytics/>,
+                   element:(<ProtectedRoute><Analytics/></ProtectedRoute>),
                    errorElement:<Error/>
                 },
                 {
                     path:"/dashboard/orders",
-                    element:<Orders/>,
+                    element:(<ProtectedRoute><Orders/></ProtectedRoute>),
                     errorElement:<Error/>
                 },
                 {
                     path:"/dashboard/orders/details/:orderId",
-                    element:<OrderDetails/>,
+                    element:(<ProtectedRoute><OrderDetails/></ProtectedRoute>),
                     errorElement:<Error/>
                 },
                 {
                     path:"/dashboard/profile",
-                    element:<Profile/>,
-                    errorElement:<Error/>
-                },
-                {
-                    path:"/dashboard/settings",
-                    element:<AccountSetting/>,
+                    element:(<ProtectedRoute><Profile/></ProtectedRoute>),
                     errorElement:<Error/>
                 }
             ]
@@ -101,7 +98,9 @@ const Routing = () => {
     ])
    
   return (
-    <RouterProvider router={BrowserRouter}/>
+  
+     <RouterProvider router={BrowserRouter}/>
+  
   )
 }
 
