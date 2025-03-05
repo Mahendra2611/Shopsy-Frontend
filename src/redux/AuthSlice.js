@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Get stored owner from localStorage and parse it
+
 const storedOwner = JSON.parse(localStorage.getItem("owner")) || {};
 
 const AuthSlice = createSlice({

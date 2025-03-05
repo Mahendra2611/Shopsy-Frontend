@@ -30,7 +30,7 @@ const Navbar = () => {
    
     useEffect(()=>{
        
-        if(name != "" && email != "")setIsLoggedIn(true);
+        if(name  && email )setIsLoggedIn(true);
         else setIsLoggedIn(false);
     },[name,email])
 
@@ -45,7 +45,7 @@ const Navbar = () => {
     
         // Call API for logout
         const response = await callApi({
-            url: "api/ownerAuth/logout",
+            url: "api/owner/logout",
             method: "GET",
             headers: { "Content-Type": "application/json" },
         });

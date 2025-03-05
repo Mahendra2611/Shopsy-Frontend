@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ children }) => {
     const { name,email} = useSelector((state)=>state.auth.owner);
-    return (name != "" && email != "" )? <Navigate to="/" /> : children;
+    return (name  && email  )? children : <Navigate to="/" /> ;
 };
 
 export default ProtectedRoute;
