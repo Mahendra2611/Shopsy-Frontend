@@ -1,12 +1,16 @@
 import { useState } from "react";
 import { Package, ShoppingCart, BarChart, AlertTriangle, User, Settings } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+
+
 
 const Dashboard = () => {
   const navigate = useNavigate();
   
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  
+ 
 
   return (
     <div className="flex min-h-screen bg-background-light dark:bg-background-dark">
@@ -54,7 +58,7 @@ const Dashboard = () => {
 
       {/* Sidebar Toggle Button */}
       <button 
-  className="fixed right-6 top-1/2 md:hidden transform translate-y-1/2 rotate-90 bg-blue-500 text-white px-4 py-2 rounded-b-lg shadow-lg  origin-right"
+  className="fixed bottom-0  md:hidden transform translate-x-2/3  bg-blue-500 text-white px-4 py-1 rounded-t-lg shadow-lg  origin-bottom "
   onClick={() => setSidebarOpen(!sidebarOpen)}
 >
   {sidebarOpen ? "Close Sidebar" : "Open Sidebar"}

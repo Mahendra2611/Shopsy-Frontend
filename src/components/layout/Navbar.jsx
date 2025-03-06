@@ -10,10 +10,11 @@ const Navbar = () => {
     const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false); // Track menu state
-    const {name,email} = useSelector((state)=>state.auth)
+    const { email, name } = useSelector((state) => state?.auth?.owner || {});
     const dispatch = useDispatch();
     const navigate = useNavigate();
-   
+   console.log(email)
+   console.log(name)
     const {callApi,loading,error} = useAPI();
   
     useEffect(() => {
@@ -29,24 +30,29 @@ const Navbar = () => {
    
     useEffect(()=>{
        
-        if(name != "" && email != "")setIsLoggedIn(true);
+        if(name  && email )setIsLoggedIn(true);
         else setIsLoggedIn(false);
     },[name,email])
-    const logout = async()=>{
-      
-        setIsLoggedIn(false)
+
+    const logout = async () => {
+        console.log("logged out");
+        setIsLoggedIn(false);
+        setMenuOpen(false);
+        dispatch(removeOwner());
        
-        dispatch(removeOwner())
-      
-        navigate("/")
-       
+        // Navigate first to avoid async issues
+        navigate("/");
+    
+        // Call API for logout
         const response = await callApi({
-            url:"api/ownerAuth/logout",
-        method:"GET",
-        header:{"Content-Type":"application/josn"}
-        })
-      
-    }
+            url: "api/owner/logout",
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+        });
+    
+        console.log("Logout Response:", response);
+    };
+    
    
     return (
         <nav className="sticky top-0  z-50 flex items-center justify-between p-4 border-b-2 border-b-cyan-900 dark:border-b-cyan-50 bg-background-light dark:bg-background-dark shadow-md">
@@ -128,10 +134,9 @@ const Navbar = () => {
                                 Dashboard
                             </Link>
                             <button
-                                onClick={() => {
-                                    setIsLoggedIn(false);
-                                    setMenuOpen(false);
-                                }}
+                                onClick={
+                                    logout
+                                }
                                 className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                             >
                                 Logout

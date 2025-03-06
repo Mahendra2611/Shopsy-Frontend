@@ -5,6 +5,7 @@ import { FaUser, FaStore, FaMapMarkerAlt, FaList, FaImage, FaMicrophone } from "
 import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 import { addOwner } from '../redux/AuthSlice';
+import { availableCategories } from '../utils/helpers.js';
 const RegisterShop = () => {
   const [formData, setFormData] = useState({
     shopName: '',
@@ -13,23 +14,38 @@ const RegisterShop = () => {
     email: '',
     mobileNumber: '',
     password: '',
-    shopCategory: '',
-    itemCategories: '',
-    shopImage: null,
+    shopCategory:'',
+    itemCategories: [],
+    shopImage:'',
     shopLocation: { type: 'Point', coordinates: [0, 0] },
   });
 
   const [listeningField, setListeningField] = useState(null);
+  const [newCategory, setNewCategory] = useState("");
 
   const dispatch = useDispatch();
   const { callApi, loading } = useAPI();
   const navigate = useNavigate();
-
+console.log(formData)
   const handleChange = (e) => {
     const { name, value } = e.target;
+    console.log(`${name} ${value}`)
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  const addCategory = () => {
+    if (newCategory && !formData.itemCategories.includes(newCategory)) {
+      setFormData({ ...formData, itemCategories: [...formData.itemCategories, newCategory] });
+    }
+    setNewCategory("");
+  };
 
+  // Handle Category Removal
+  const removeCategory = (category) => {
+    setFormData({
+      ...formData,
+      itemCategories: formData.itemCategories.filter((cat) => cat !== category),
+    });
+  };
 
 
   const fetchLocation = () => {
@@ -71,7 +87,7 @@ const RegisterShop = () => {
     }
     return true;
   };
-
+ // console.log(formData)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -80,22 +96,29 @@ const RegisterShop = () => {
     Object.entries(formData).forEach(([key, value]) => {
       formDataToSend.append(key, value);
     });
-
+    console.log(formData)
     try {
       const response = await callApi({
         url: "api/owner/register",
         method: "POST",
-        data: formDataToSend
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" }
       });
 
       if (response) {
-        dispatch(addOwner(response.shop));
-        navigate("/dashboard");
+        toast.success("Login successful!");
+      console.log(response)
+      const owner = {"email":response.owner.email,"name":response.owner.ownerName}
+      console.log(owner);
+      localStorage.setItem("owner", JSON.stringify(owner));
+      dispatch(addOwner(owner));
+     
+      navigate("/dashboard");
       } else {
         toast.error("Error registering shop");
       }
     } catch (err) {
-      toast.error("Error registering shop");
+      toast.error(err?.message||"Error while registring") ;
     }
   };
 
@@ -118,7 +141,13 @@ const RegisterShop = () => {
       <div className="w-full max-w-md p-4 sm:p-8 bg-white dark:bg-gray-800 shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold text-center mb-6 text-black dark:text-white">Register Shop</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {['shopName', 'shopAddress', 'ownerName', 'email', 'mobileNumber', 'shopCategory', 'itemCategories'].map((field, index) => (
+          {['shopName', 'shopAddress', 'ownerName', 'email', 'mobileNumber'].map((field, index) => 
+          { const formattedLabel = field
+           .replace(/([A-Z])/g, ' $1') 
+           .replace(/^./, (char) => char.toUpperCase()); 
+          return (
+            <div>
+              <label className="block text-gray-700 dark:text-gray-300">{formattedLabel}</label>
             <div key={index} className="flex items-center border rounded p-2 bg-gray-100 dark:bg-gray-700">
               <input
                 type="text"
@@ -133,8 +162,63 @@ const RegisterShop = () => {
                 <FaMicrophone className={listeningField === field ? "text-red-500 animate-pulse" : "text-gray-500"} />
               </button>
             </div>
-          ))}
+            </div>
+          )})}
 
+          {/* shop category */}
+          <div>
+              <label className="block text-gray-700 dark:text-gray-300">Shop Category</label>
+              <select
+                name="shopCategory"
+                value={formData.shopCategory}
+                onChange={handleChange}
+                className="w-full p-2 border rounded text-black dark:text-white bg-gray-100 dark:bg-gray-800"
+              >
+                {availableCategories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+
+<div>
+              <label className="block text-gray-700 dark:text-gray-300">Product Categories</label>
+              <div className="flex flex-wrap gap-2">
+                {formData.itemCategories.map((category, index) => (
+                  <span
+                    key={index}
+                    className="bg-blue-500 text-white px-2 py-1 rounded flex items-center space-x-1"
+                  >
+                    {category}
+                    <button
+                      type="button"
+                      className="ml-1 text-sm text-white hover:text-red-500"
+                      onClick={() => removeCategory(category)}
+                    >
+                      ✕
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="flex mt-2 dark:text-white">
+                <input
+                  type="text"
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                  placeholder="Add new category"
+                  className="w-full p-2 border  rounded bg-gray-100 dark:bg-gray-800"
+                />
+                <button
+                  type="button"
+                  onClick={addCategory}
+                  className="ml-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
           {/* Password Field - No Mic */}
           <div className="flex items-center border rounded p-2 bg-gray-100 dark:bg-gray-700">
             <input

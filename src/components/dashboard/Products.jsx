@@ -64,7 +64,7 @@ const Products = () => {
       
 
       <button 
-  className="fixed right-6 top-1/2 md:hidden transform translate-y-1/2 rotate-90 bg-blue-500 text-white px-4 py-2 rounded-b-lg shadow-lg  origin-right"
+  className="fixed bottom-0  md:hidden transform translate-x-1/2  bg-blue-500 text-white px-4 py-1 rounded-t-lg shadow-lg  origin-bottom "
   onClick={() => setSidebarOpen(!sidebarOpen)}
 >
   {sidebarOpen ? "Close Sidebar" : "Open Sidebar"}

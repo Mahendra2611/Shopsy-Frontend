@@ -79,16 +79,20 @@ const Login = () => {
     };
 
     const response = await callApi({
-      url: "api/ownerAuth/login",
+      url: "api/owner/login",
       method: "POST",
       data: requestData,
       headers: { "Content-Type": "application/json" },
     });
 
-    if (response?.success) {
+    if (response) {
       toast.success("Login successful!");
-      dispatch(addOwner({ name: response.name, email: response.email }));
-      dispatch(addShopDetails(response.shopDetails));
+      console.log(response)
+      const owner = {"email":response.owner.email,"name":response.owner.ownerName}
+      console.log(owner);
+      localStorage.setItem("owner", JSON.stringify(owner));
+      dispatch(addOwner(owner));
+     
       navigate("/dashboard");
     } else {
       toast.error(response?.message || "Login failed");

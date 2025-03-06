@@ -5,17 +5,20 @@ import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react"; // Import PersistGate
-import Store, { persistor } from "./redux/Store";
+import Store from "./redux/Store";
 import Routing from "./Routing";
+import { SocketProvider } from "./context/socketContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
  
     <Provider store={Store}>
-      <PersistGate loading={null} persistor={persistor}>
-
-          <Routing />
+     
+<SocketProvider>
+<Routing />
+</SocketProvider>
+         
       
-      </PersistGate>
+     
     </Provider>
   
 );

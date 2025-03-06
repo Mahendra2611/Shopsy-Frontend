@@ -44,7 +44,7 @@ const handleDelete = async () => {
     toast.error("Failed to delete product. Please try again.");
   }
 };
-
+ 
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
