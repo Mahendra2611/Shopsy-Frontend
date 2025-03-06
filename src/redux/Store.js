@@ -7,7 +7,7 @@ import productReducer from "./ProductSlice"
 import orderReducer from "./OrderSlice"
 import sessionStorage from "redux-persist/lib/storage/session";
 import lowStockReducer from "./LowStockSlice"
-
+import notificationReducer from "./NotificationSlice"
 
 
 // Create store
@@ -17,6 +17,7 @@ const Store = configureStore({
   products: productReducer,
   orders:orderReducer,
   lowStock:lowStockReducer,
+  notification:notificationReducer,
  }
 });
 

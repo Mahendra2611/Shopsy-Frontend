@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { useDispatch } from "react-redux";
-import { updateOrder } from "../redux/OrderSlice";// Redux action
+import { addNotification } from "../redux/NotificationSlice";
+import { updateOrder } from "../redux/OrderSlice";
 import { addLowStock } from "../redux/LowStockSlice";
 
 export const SocketContext = createContext();
@@ -11,26 +12,29 @@ export const SocketProvider = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // Only connect if user is logged in
-   // const user = JSON.parse(localStorage.getItem("user"));
-   const owner = {shopId:"65d8c8e2a4f3b6b4c8a54321"}
+    const owner = { shopId: "65d8c8e2a4f3b6b4c8a54321" };
     if (!owner?.shopId) return;
 
     const newSocket = io("http://localhost:3000", { withCredentials: true });
 
     newSocket.emit("joinShop", owner.shopId);
 
-    // Listen for new orders
     newSocket.on("newOrder", (data) => {
       console.log("New order received:", data);
-      dispatch(updateOrder(data?.order))
-      //dispatch(addOrder(data.order));
+      dispatch(updateOrder(data?.order));
+      dispatch(addNotification({ 
+        type: "order", 
+        message: data.message, 
+      }));
     });
 
-    // Listen for low stock alerts
     newSocket.on("lowStockAlert", (data) => {
       console.log("Low stock alert:", data);
-      //dispatch(LowStock(data));
+      dispatch(addLowStock(data.productId));
+      dispatch(addNotification({ 
+        type: "lowStock", 
+        message: data.message, 
+      }));
     });
 
     setSocket(newSocket);

@@ -5,7 +5,7 @@ import {useSelector,useDispatch} from "react-redux"
 import { removeOwner } from "../../redux/AuthSlice";
 import { useNavigate } from "react-router-dom";
 import useAPI from "../../hooks/useAPI";
-
+import NotificationBell from "./Notification";
 const Navbar = () => {
     const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -60,7 +60,7 @@ const Navbar = () => {
             <Link to="/" className="text-xl font-bold text-heading-light dark:text-heading-dark">
                 ShopEase
             </Link>
-
+            <NotificationBell/>
             {/* Buttons */}
             <div className="hidden sml:flex items-center gap-4">
                 {/* Theme Toggle */}

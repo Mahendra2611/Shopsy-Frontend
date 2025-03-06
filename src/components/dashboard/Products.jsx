@@ -48,9 +48,9 @@ const Products = () => {
 >
         <h2 className="text-xl font-bold text-gray-700 dark:text-gray-200 mb-6">Categories</h2>
         <ul className="spce-y-1 md:space-y-2 dark:text-white">
-          {categories.map((category) => (
+          {categories.map((category,index) => (
             <li
-              key={category}
+              key={index}
               className={`cursor-pointer p-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-blue-500 ${
                 selectedCategory === category ? "bg-gray-300 dark:bg-gray-700" : ""
               }`}
