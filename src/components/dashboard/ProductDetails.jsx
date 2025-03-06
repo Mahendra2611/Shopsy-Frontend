@@ -1,49 +1,18 @@
-import { useState } from "react";
+
 import { IoClose, IoTrash, IoPencil } from "react-icons/io5";
-import { useNavigate, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import useAPI from "../../hooks/useAPI";
-import toast from "react-hot-toast";
-import { deleteProduct } from "../../redux/ProductSlice";
 
-const ProductDetails = () => {
-  const navigate = useNavigate();
-  const { productId } = useParams();
-  const dispatch = useDispatch();
-  const [showConfirm, setShowConfirm] = useState(false);
 
-  // Get product from Redux store
-  const categorizedProducts = useSelector((state) => state.products.products);
-  let product = null;
-  Object.values(categorizedProducts).forEach((category) => {
-    const foundProduct = category.find((item) => item._id === (productId));
-    if (foundProduct) product = foundProduct;
-  });
-
+const ProductDetails = ({product,handleDelete,showConfirm,setShowConfirm,navigate,loading}) => {
+ console.log(product)
+ console.log(handleDelete)
+console.log(showConfirm)
   if (!product) {
     return <p className="text-center text-gray-600 dark:text-gray-300">Product not found.</p>;
   }
 
-  // Delete Product
-  const { callApi,loading } = useAPI();
+ 
 
-const handleDelete = async () => {
-  console.log("Delete called");
-  
-  const response = await callApi({
-    url: `api/product/${product._id}/delete`,
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-  });
-  console.log(response)
-  if (response) {
-    dispatch(deleteProduct({ category: product.category, id: product.id }));
-    toast.success("Product deleted successfully!");
-    navigate("/dashboard/products");
-  } else {
-    toast.error("Failed to delete product. Please try again.");
-  }
-};
+
  
 
   return (

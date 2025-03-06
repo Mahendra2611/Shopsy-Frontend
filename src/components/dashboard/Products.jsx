@@ -4,17 +4,41 @@ import { useNavigate } from "react-router-dom";
 import { addProducts } from "../../redux/ProductSlice";
 import useAPI from "../../hooks/useAPI";
 import toast from "react-hot-toast";
+import { deleteProduct } from "../../redux/ProductSlice";
+import ProductDetails from "./ProductDetails";
+import Skeleton from "../common/Skeleton";
+
 
 const Products = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { callApi } = useAPI();
+  const { callApi ,loading} = useAPI();
   const { products } = useSelector((state) => state.products);
   const shopId = "65d8c8e2a4f3b6b4c8a54321";
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
-
-  
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [showDetails,setShowDetails] = useState(false);
+  const [product,setProduct] = useState({});
+  const handleDelete = async () => {
+    console.log("Delete called");
+    
+    const response = await callApi({
+      url: `api/product/${product._id}/delete`,
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
+    console.log(response)
+    if (response) {
+      dispatch(deleteProduct({ category: product.category, id: product.id }));
+      toast.success("Product deleted successfully!");
+      navigate("/dashboard/products");
+    } else {
+      toast.error("Failed to delete product. Please try again.");
+    }
+    setShowConfirm(false);
+    setShowDetails(false);
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -36,10 +60,15 @@ const Products = () => {
     fetchProducts();
   }, []);
 
+
   const categories = Object.keys(products || {});
   const filteredProducts = selectedCategory ? products[selectedCategory] || [] : [];
+  
+   if(loading){
+    return <Skeleton/>
+   }
 
-  return (
+  return (!showDetails)?(
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-800">
       {/* Sidebar */}
       <div className={`fixed top-16 md:top-0  left-0 h-[100vh] w-64 bg-white dark:bg-gray-900 shadow-xl p-6 transition-transform transform ${
@@ -87,7 +116,7 @@ const Products = () => {
                 <p className="text-[13px] md:text-xl text-gray-600 dark:text-gray-300">Category: {product.category}</p>
                 <p className="text-[13px] md:text-xl text-gray-600 dark:text-gray-300">Price: ₹{product.price}</p>
                 <button
-                  onClick={() => navigate(`/dashboard/products/details/${product._id}`)}
+                  onClick={() => {setShowDetails(true),setProduct(product)}}
                   className="mt-3 w-full bg-blue-500 text-white p-1 md:py-2 rounded text-sm md:text-lg hover:bg-blue-600"
                 >
                   View Details
@@ -100,7 +129,7 @@ const Products = () => {
         </div>
       </div>
     </div>
-  );
+  ):(<ProductDetails product={product} handleDelete={handleDelete} showConfirm={showConfirm} setShowConfirm={setShowConfirm} navigate={navigate} loading={loading}/>);
 };
 
 export default Products;

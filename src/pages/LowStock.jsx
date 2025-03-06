@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import useAPI from "../hooks/useAPI";
-
+import Skeleton from "../components/common/Skeleton";
 const LowStock = () => {
   const [products, setProducts] = useState([]);
   const [updatedQuantities, setUpdatedQuantities] = useState({});
   const [flag,setFlag] = useState(false);
-const {callApi} = useAPI();
+const {callApi,loading} = useAPI();
   useEffect(() => {
     const fetchLowStockProducts = async () => {
       const data = await callApi({ url: "api/product/low-stock/65d8c8e2a4f3b6b4c8a54321" });
@@ -37,7 +37,9 @@ const {callApi} = useAPI();
       setFlag(true);
     }
   };
-
+  if(loading){
+    return <Skeleton/>
+  }
   return (
     <div className="container mx-auto p-6 bg-background-light dark:bg-background-dark min-h-screen">
       <h2 className="text-2xl font-bold mb-6 text-black dark:text-white">Low Stock Products</h2>

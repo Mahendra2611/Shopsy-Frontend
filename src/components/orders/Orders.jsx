@@ -1,20 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { updateOrder } from "../../redux/OrderSlice";
 import { useNavigate } from "react-router-dom";
 import { addOrders } from "../../redux/OrderSlice";
 import useAPI from "../../hooks/useAPI";
 import toast from "react-hot-toast";
+import OrderDetails from "./OrderDetails";
+import Skeleton from "../common/Skeleton";
 
 const Orders = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { callApi } = useAPI();
+  const { callApi,loading } = useAPI();
   const { orders } = useSelector((state) => state.orders);
   const shopId = "65d8c8e2a4f3b6b4c8a54321";
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("Pending");
+const [viewDetails,setViewDetails] = useState(false);
+  const [orderId,setOrderId] = useState(null);
+  const [order, setOrder] = useState(null);
+console.log(viewDetails)
 
-  
+useEffect(() => {
+    // Find the order from Redux store
+    if(!orderId)return;
+    let foundOrder = null;
+    for (const status in orders) {
+      foundOrder = orders[status].find((o) => o._id === orderId);
+      if (foundOrder) break;
+    }
+    setOrder(foundOrder);
+  }, [orderId, orders]);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -36,10 +52,36 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
+  const handleUpdateStatus = async (status) => {
+    console.log("handle update called ",status)
+    try {
+        const response = await callApi({
+            url: `api/order/${orderId}/status`,
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            data:{status}
+          });
+         console.log(response)
+      if (response) {
+        console.log("Dispatched")
+        dispatch(updateOrder(response.order));
+        toast.success(`Order ${status} successfully!`);
+        
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.response?.data?.message || "Something went wrong!");
+    }
+    setViewDetails(false);
+  };
+
   const statuses = ["Pending", "Accepted", "Cancelled", "Delivered"];
   const filteredOrders = selectedStatus ? orders[selectedStatus] || [] : [];
+if(loading){
+    return <Skeleton/>
+   }
 
-  return (
+  return (!viewDetails)?(
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-800">
       {/* Sidebar */}
       <div className={`fixed top-16 md:top-0  left-0 h-[100vh] w-64 bg-white dark:bg-gray-900 shadow-xl p-6 transition-transform transform ${
@@ -92,41 +134,15 @@ const Orders = () => {
           Total Amount:<span className="font-semibold text-gray-600 dark:text-gray-300"> ₹{order.totalAmount}</span>
         </p>
 
-        {/* Products in Order */}
-        {/* <div className="mt-3">
-          <h4 className="text-sm font-semibold text-black dark:text-white">Products:</h4>
-          {order.products.map((product) => (
-            <div key={product._id} className="mt-2 p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
-              <p className="text-xs md:text-sm text-black dark:text-white">
-                {product.name} ({product.category})
-              </p>
-              <p className="text-xs text-gray-600 dark:text-gray-300">
-                Qty: {product.quantity} | Price: ₹{product.price}
-              </p>
-            </div>
-          ))}
-        </div> */}
-
         {/* Action Buttons */}
         <div className="mt-3 flex flex-col space-y-2">
-          {/* <button
-            className="bg-green-500 text-white p-1 md:py-2 rounded text-sm md:text-lg hover:bg-green-600"
-            onClick={() => updateOrderStatus(order._id, "Delivered")}
-          >
-            Mark as Accepted
-          </button> */}
+
           <button
             className="bg-blue-500 text-white p-1 md:py-2 rounded text-sm md:text-lg hover:bg-blue-600"
-            onClick={() => navigate(`/dashboard/orders/details/${order._id}`)}
+            onClick={() => {setViewDetails(true),setOrderId(order._id)}}
           >
             View Details
           </button>
-          {/* <button
-            className="bg-red-500 text-white p-1 md:py-2 rounded text-sm md:text-lg hover:bg-red-600"
-            onClick={() => cancelOrder(order._id)}
-          >
-            Cancel Order
-          </button> */}
         </div>
       </div>
     ))
@@ -139,7 +155,7 @@ const Orders = () => {
 
       </div>
     </div>
-  );
+  ):(<OrderDetails handleUpdateStatus={handleUpdateStatus} order={order}/>);
 };
 
 export default Orders;
