@@ -52,7 +52,7 @@ const {callApi} = useAPI();
     <div className="relative">
       {/* Notification Bell Icon */}
       <button className="relative text-black dark:text-white focus:outline-none" onClick={() => setIsOpen(!isOpen)}>
-        <Bell className="w-6 h-6 " fill="yellow" />
+        <Bell className="w-6 h-6 " />
         {notifications.length > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
             {notifications.length}
