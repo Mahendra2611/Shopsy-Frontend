@@ -27,7 +27,6 @@ console.log(response)
             console.log(err.response?.data || "Something went wrong");
             return null; // Return null on error
         } finally {
-           
             setLoading(false);
         }
     };

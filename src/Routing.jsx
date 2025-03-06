@@ -14,7 +14,7 @@ import ProductDetails from './components/dashboard/ProductDetails'
 import UpdateProduct from './components/dashboard/UpdateProduct'
 import Analytics from './pages/Analytics'
 const Routing = () => {
-    
+     
     const BrowserRouter  = createBrowserRouter([
         {
             path:"/",

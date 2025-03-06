@@ -3,12 +3,11 @@ import storage from "redux-persist/lib/storage"; // Defaults to localStorage
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "redux";
 import authReducer from "./AuthSlice";
-import productReducer from "./ProductSlice"
+import productReducer from "./ProductSlice";
 import sessionStorage from "redux-persist/lib/storage/session";
 
 
 const persistConfig = { key: "root", storage: sessionStorage };
-
 
 // Combine reducers
 const rootReducer = combineReducers({

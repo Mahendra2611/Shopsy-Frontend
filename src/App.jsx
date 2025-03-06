@@ -14,7 +14,7 @@ function App() {
     <Navbar/>
     
     <Outlet/>
-  </div>
+  </div> 
   )
 }
 
