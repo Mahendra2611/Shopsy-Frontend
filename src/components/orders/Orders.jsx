@@ -11,9 +11,9 @@ import Skeleton from "../common/Skeleton";
 const Orders = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { callApi,loading } = useAPI();
+  const { callApi,loading ,error} = useAPI();
   const { orders } = useSelector((state) => state.orders);
-  const shopId = "65d8c8e2a4f3b6b4c8a54321";
+  const shopId = "67c6f385a13214cb0b129350";
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("Pending");
 const [viewDetails,setViewDetails] = useState(false);
@@ -34,19 +34,19 @@ useEffect(() => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      console.log("called");
+      //console.log("called");
       const response = await callApi({
         url: `api/order/shop/${shopId}`,
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-      console.log(response);
+      //console.log(response);
       if (response) {
        
         dispatch(addOrders(response.orders));
-        toast.success("Products loaded successfully!");
+        
       } else {
-        toast.error("Failed to fetch products. Please try again.");
+       
       }
     };
     fetchOrders();
@@ -61,16 +61,16 @@ useEffect(() => {
             headers: { "Content-Type": "application/json" },
             data:{status}
           });
-         console.log(response)
+         //console.log(response)
       if (response) {
-        console.log("Dispatched")
+        //console.log("Dispatched")
         dispatch(updateOrder(response.order));
         toast.success(`Order ${status} successfully!`);
         
       }
     } catch (error) {
-      console.log(error)
-      toast.error(error.response?.data?.message || "Something went wrong!");
+      //console.log(error)
+      //toast.error(error.response?.data?.message || "Something went wrong!");
     }
     setViewDetails(false);
   };
@@ -105,8 +105,8 @@ if(loading){
       </div>
       
 
-      <button 
-  className="fixed bottom-0  md:hidden transform translate-x-1/2  bg-blue-500 text-white px-4 py-1 rounded-t-lg shadow-lg  origin-bottom "
+      <button
+  className="fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-t-lg shadow-lg"
   onClick={() => setSidebarOpen(!sidebarOpen)}
 >
   {sidebarOpen ? "Close Sidebar" : "Open Sidebar"}

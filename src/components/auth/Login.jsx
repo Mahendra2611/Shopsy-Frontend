@@ -84,18 +84,17 @@ const Login = () => {
       data: requestData,
       headers: { "Content-Type": "application/json" },
     });
-
+    console.log(response)
     if (response) {
       toast.success("Login successful!");
       console.log(response)
       const owner = {"email":response.owner.email,"name":response.owner.ownerName}
       console.log(owner);
       localStorage.setItem("owner", JSON.stringify(owner));
-      dispatch(addOwner(owner));
-     
+      dispatch(addOwner({owner:owner,category:response.owner.itemCategories}));
       navigate("/dashboard");
     } else {
-      toast.error(response?.message || "Login failed");
+      
     }
   };
 

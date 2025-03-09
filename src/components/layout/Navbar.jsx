@@ -46,7 +46,7 @@ const Navbar = () => {
         // Call API for logout
         const response = await callApi({
             url: "api/owner/logout",
-            method: "GET",
+            method: "POST",
             headers: { "Content-Type": "application/json" },
         });
     
@@ -60,7 +60,7 @@ const Navbar = () => {
             <Link to="/" className="text-xl font-bold text-heading-light dark:text-heading-dark">
                 ShopEase
             </Link>
-            <NotificationBell/>
+            {isLoggedIn && <NotificationBell/>}
             {/* Buttons */}
             <div className="hidden sml:flex items-center gap-4">
                 {/* Theme Toggle */}
@@ -74,9 +74,13 @@ const Navbar = () => {
                 {/* Auth Buttons */}
                 {isLoggedIn ? (
                     <>
-                        <Link to="/dashboard" className="text-paragraph-light dark:text-paragraph-dark">
-                            Dashboard
-                        </Link>
+                        <Link
+  to="/dashboard"
+  className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium shadow-md hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
+>
+  Dashboard
+</Link>
+
                         <button
                             onClick={logout}
                             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
@@ -127,12 +131,12 @@ const Navbar = () => {
                     {isLoggedIn ? (
                         <>
                             <Link
-                                to="/dashboard"
-                                onClick={() => setMenuOpen(false)}
-                                className="text-paragraph-light dark:text-paragraph-dark"
-                            >
-                                Dashboard
-                            </Link>
+  to="/dashboard"
+  className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium shadow-md hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
+>
+  Dashboard
+</Link>
+
                             <button
                                 onClick={
                                     logout

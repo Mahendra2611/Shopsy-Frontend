@@ -22,10 +22,10 @@ const productSlice = createSlice({
     },
     
     updateProduct: (state, action) => {
-      const { category, id, updatedProduct } = action.payload;
+      const { category, _id } = action.payload;
       if (state.products[category]) {
         state.products[category] = state.products[category].map((product) =>
-          product.id === id ? { ...product, ...updatedProduct } : product
+          product._id === _id ? action.payload : product
         );
       }
     },

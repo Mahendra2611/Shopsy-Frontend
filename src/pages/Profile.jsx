@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import useAPI from "../hooks/useAPI";
+import { FaUser } from "react-icons/fa";
 
 const Profile = () => {
   const [ownerData, setOwnerData] = useState(null);
@@ -115,8 +116,8 @@ const Profile = () => {
       {/* Profile Section */}
       <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-4">
         <img
-          src={ownerData.shopImage || "/shop-logo.png"}
-          alt="Shop Logo"
+          src={ownerData?.shopImage  }
+          alt={<FaUser/>}
           className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-gray-300 dark:border-gray-700 object-cover"
         />
         <div className="text-center sm:text-left">

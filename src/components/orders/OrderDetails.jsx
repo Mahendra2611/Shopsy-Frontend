@@ -7,9 +7,9 @@ import { toast } from "react-toastify";
 import { updateOrder } from "../../redux/OrderSlice";
 
 const OrderDetails = ({handleUpdateStatus,order}) => {
-  console.log("called")
- console.log(handleUpdateStatus)
- console.log(order)
+//   console.log("called")
+//  console.log(handleUpdateStatus)
+//  console.log(order)
   if (!order) {
     return <p className="text-center text-gray-500">Order not found.</p>;
   }

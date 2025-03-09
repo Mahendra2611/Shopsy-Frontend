@@ -20,4 +20,33 @@ const SkeletonCard = () => {
   };
   
   export default Skeleton;
+
+  export const DashboardSkeleton = () => {
+    return (
+      <div className="flex-1 p-6 bg-background-light dark:bg-background-dark">
+        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 animate-pulse bg-gray-300 dark:bg-gray-700 h-8 w-48 rounded"></h2>
+  
+        {/* Action Buttons Skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="h-12 bg-gray-300 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+          ))}
+        </div>
+  
+        {/* Stats Cards Skeleton */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="bg-gray-300 dark:bg-gray-700 p-4 rounded-lg shadow-lg animate-pulse">
+              <div className="h-4 w-32 bg-gray-400 dark:bg-gray-600 rounded mb-2"></div>
+              <div className="h-8 w-20 bg-gray-400 dark:bg-gray-600 rounded mb-3"></div>
+              <div className="h-6 w-24 bg-gray-500 dark:bg-gray-600 rounded"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+  
+
+  
   

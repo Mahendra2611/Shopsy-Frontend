@@ -1,21 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 
-const storedOwner = JSON.parse(localStorage.getItem("owner")) || {};
+const owner = JSON.parse(localStorage.getItem("owner")) || {};
+const storedOwner = owner.owner
 
 const AuthSlice = createSlice({
     name: "auth",
-    initialState: { owner: storedOwner },
+    initialState: { owner: storedOwner ,category:[]},
     reducers: {
         addOwner: (state, action) => {
-            console.log("add owner");
-            state.owner = action.payload;
-
+           // console.log("add owner");
+            state.owner = action.payload.owner;
+            state.category = action.payload.category
             // Store updated owner in localStorage
             localStorage.setItem("owner", JSON.stringify(action.payload));
         },
         removeOwner: (state) => {
-            console.log("remove owner");
+           // console.log("remove owner");
             state.owner = {};
 
             // Remove from localStorage
