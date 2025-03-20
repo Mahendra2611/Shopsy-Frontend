@@ -12,7 +12,7 @@ export const SocketProvider = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const owner = { shopId: "65d8c8e2a4f3b6b4c8a54321" };
+    const owner = { shopId: "67c6f385a13214cb0b129350" };
     if (!owner?.shopId) return;
 
     const newSocket = io("http://localhost:3000", { withCredentials: true });
