@@ -1,54 +1,16 @@
-import { useParams,useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import { useEffect, useState } from "react";
-import useAPI from "../../hooks/useAPI";
-import { toast } from "react-toastify";
-import { updateOrder } from "../../redux/OrderSlice";
-
-const OrderDetails = () => {
-  const { orderId } = useParams();
-  const dispatch = useDispatch();
-  const { orders} = useSelector((state) => state.orders);
-  const [order, setOrder] = useState(null);
-  const {callApi }= useAPI();
-  const navigate = useNavigate();
-  useEffect(() => {
-    // Find the order from Redux store
-    let foundOrder = null;
-    for (const status in orders) {
-      foundOrder = orders[status].find((o) => o._id === orderId);
-      if (foundOrder) break;
-    }
-    setOrder(foundOrder);
-  }, [orderId, orders]);
-
  
-
+const OrderDetails = ({handleUpdateStatus,order}) => {
+  console.log("called")
+ console.log(handleUpdateStatus)
+ console.log(order)
   if (!order) {
     return <p className="text-center text-gray-500">Order not found.</p>;
   }
 
   // Function to update order status
-  const handleUpdateStatus = async (status) => {
-    try {
-        const response = await callApi({
-            url: `api/order/${orderId}/status`,
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            data:{status}
-          });
-         
-      if (response) {
-        console.log("Dispatched")
-        dispatch(updateOrder(response));
-        toast.success(`Order ${status} successfully!`);
-        navigate("/dashboard/orders")
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong!");
-    }
-  };
+  
 
   return (
     <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-5 shadow-lg rounded-lg">
@@ -83,13 +45,13 @@ const OrderDetails = () => {
       {order.status === "Accepted" ?( <div className="flex justify-center items-center mt-2">
         <button
           onClick={() => handleUpdateStatus("Delivered")}
-          className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700"
+          className="flex items-center gap-2 px-4 py-2 bg-yellow-600 text-white rounded-lg shadow-md hover:bg-green-700"
         >
           <FaCheckCircle className="h-5 w-5" /> Deliver Order
         </button>
         </div>
         ) 
-        :
+        : (order.status === "Pending")?
         (<div className="mt-5 flex gap-4">
         <button
           onClick={() => handleUpdateStatus("Accepted")}
@@ -104,7 +66,15 @@ const OrderDetails = () => {
         >
           <FaTimesCircle className="h-5 w-5" /> Cancel Order
         </button>
-      </div>)}
+      </div>):( <div className="flex justify-center items-center mt-2">
+        <button
+         
+          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-green-700"
+        >
+          <FaTimesCircle className="h-5 w-5" /> order has been cancelled
+        </button>
+        </div>
+        ) }
     </div>
   );
 };

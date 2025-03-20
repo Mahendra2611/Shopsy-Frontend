@@ -18,7 +18,7 @@ import OrderDetails from './components/orders/OrderDetails'
 import Profile from './pages/Profile'
 import PublicRoute from './components/auth/PublicRoute'
 import ProtectedRoute from './components/auth/ProtectedRoute'
-
+import LowStock from './pages/LowStock.jsx'
 const Routing = () => {
      
     const BrowserRouter  = createBrowserRouter([
@@ -90,6 +90,11 @@ const Routing = () => {
                 {
                     path:"/dashboard/profile",
                     element:(<ProtectedRoute><Profile/></ProtectedRoute>),
+                    errorElement:<Error/>
+                },
+                {
+                    path:"/dashboard/low-stock",
+                    element:(<ProtectedRoute><LowStock/></ProtectedRoute>),
                     errorElement:<Error/>
                 }
             ]
