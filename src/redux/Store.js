@@ -4,27 +4,23 @@ import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "redux";
 import authReducer from "./AuthSlice";
 import productReducer from "./ProductSlice"
+import orderReducer from "./OrderSlice"
 import sessionStorage from "redux-persist/lib/storage/session";
+import lowStockReducer from "./LowStockSlice"
+import notificationReducer from "./NotificationSlice"
 
-
-const persistConfig = { key: "root", storage: sessionStorage };
-
-
-// Combine reducers
-const rootReducer = combineReducers({
-  auth: authReducer,
-  products: productReducer,
-});
-
-// Wrap rootReducer with persistReducer
-const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 // Create store
 const Store = configureStore({
-  reducer: persistedReducer,
+ reducer:{
+  auth: authReducer,
+  products: productReducer,
+  orders:orderReducer,
+  lowStock:lowStockReducer,
+  notification:notificationReducer,
+ }
 });
 
-// Create persistor
-export const persistor = persistStore(Store);
+
 
 export default Store;

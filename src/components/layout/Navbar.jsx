@@ -5,15 +5,16 @@ import {useSelector,useDispatch} from "react-redux"
 import { removeOwner } from "../../redux/AuthSlice";
 import { useNavigate } from "react-router-dom";
 import useAPI from "../../hooks/useAPI";
-
+import NotificationBell from "./Notification";
 const Navbar = () => {
     const [darkMode, setDarkMode] = useState(localStorage.getItem("theme") === "dark");
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false); // Track menu state
-    const {name,email} = useSelector((state)=>state.auth)
+    const { email, name } = useSelector((state) => state?.auth?.owner || {});
     const dispatch = useDispatch();
     const navigate = useNavigate();
-   
+   console.log(email)
+   console.log(name)
     const {callApi,loading,error} = useAPI();
   
     useEffect(() => {
@@ -29,24 +30,29 @@ const Navbar = () => {
    
     useEffect(()=>{
        
-        if(name != "" && email != "")setIsLoggedIn(true);
+        if(name  && email )setIsLoggedIn(true);
         else setIsLoggedIn(false);
     },[name,email])
-    const logout = async()=>{
-      
-        setIsLoggedIn(false)
+
+    const logout = async () => {
+        console.log("logged out");
+        setIsLoggedIn(false);
+        setMenuOpen(false);
+        dispatch(removeOwner());
        
-        dispatch(removeOwner())
-      
-        navigate("/")
-       
+        // Navigate first to avoid async issues
+        navigate("/");
+    
+        // Call API for logout
         const response = await callApi({
-            url:"api/ownerAuth/logout",
-        method:"GET",
-        header:{"Content-Type":"application/josn"}
-        })
-      
-    }
+            url: "api/owner/logout",
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        });
+    
+        console.log("Logout Response:", response);
+    };
+    
    
     return (
         <nav className="sticky top-0  z-50 flex items-center justify-between p-4 border-b-2 border-b-cyan-900 dark:border-b-cyan-50 bg-background-light dark:bg-background-dark shadow-md">
@@ -54,7 +60,7 @@ const Navbar = () => {
             <Link to="/" className="text-xl font-bold text-heading-light dark:text-heading-dark">
                 ShopEase
             </Link>
-
+            {isLoggedIn && <NotificationBell/>}
             {/* Buttons */}
             <div className="hidden sml:flex items-center gap-4">
                 {/* Theme Toggle */}
@@ -68,9 +74,13 @@ const Navbar = () => {
                 {/* Auth Buttons */}
                 {isLoggedIn ? (
                     <>
-                        <Link to="/dashboard" className="text-paragraph-light dark:text-paragraph-dark">
-                            Dashboard
-                        </Link>
+                        <Link
+  to="/dashboard"
+  className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium shadow-md hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
+>
+  Dashboard
+</Link>
+
                         <button
                             onClick={logout}
                             className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
@@ -121,17 +131,16 @@ const Navbar = () => {
                     {isLoggedIn ? (
                         <>
                             <Link
-                                to="/dashboard"
-                                onClick={() => setMenuOpen(false)}
-                                className="text-paragraph-light dark:text-paragraph-dark"
-                            >
-                                Dashboard
-                            </Link>
+  to="/dashboard"
+  className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium shadow-md hover:from-blue-600 hover:to-purple-700 transition-all duration-300"
+>
+  Dashboard
+</Link>
+
                             <button
-                                onClick={() => {
-                                    setIsLoggedIn(false);
-                                    setMenuOpen(false);
-                                }}
+                                onClick={
+                                    logout
+                                }
                                 className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
                             >
                                 Logout

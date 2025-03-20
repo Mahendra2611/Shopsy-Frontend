@@ -7,8 +7,9 @@ const productSlice = createSlice({
   },
   reducers: {
     addProducts: (state, action) => {
-      const categorizedProducts = {};
-      
+      state.products = {};
+    
+      let categorizedProducts = {};
       action.payload.forEach((product) => {
         const category = product.category; // Assuming each product has a category field
         if (!categorizedProducts[category]) {
@@ -21,10 +22,10 @@ const productSlice = createSlice({
     },
     
     updateProduct: (state, action) => {
-      const { category, id, updatedProduct } = action.payload;
+      const { category, _id } = action.payload;
       if (state.products[category]) {
         state.products[category] = state.products[category].map((product) =>
-          product.id === id ? { ...product, ...updatedProduct } : product
+          product._id === _id ? action.payload : product
         );
       }
     },
