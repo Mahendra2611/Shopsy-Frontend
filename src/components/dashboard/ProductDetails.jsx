@@ -1,24 +1,23 @@
 
 import { IoClose, IoTrash, IoPencil } from "react-icons/io5";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
+
 import EmptyState from "../common/EmptyState";
 
 
-const ProductDetails = ({product,handleDelete,showConfirm,setShowConfirm,navigate,loading}) => {
-//  console.log(product)
-//  console.log(handleDelete)
-// console.log(showConfirm)
+const ProductDetails = ({product,handleDelete,showConfirm,setShowConfirm,navigate,loading,setShowDetails}) => {
+
   if (!product) {
     return <p className="text-center text-gray-600 dark:text-gray-300"><EmptyState message="No Product Found"/></p>;
   }
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      
       <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-96 relative">
-        {/* <button onClick={() => navigate(-1)} className="absolute top-3 right-3 text-gray-600 hover:text-red-500">
-          <IoClose size={24} />
-        </button> */}
+      <p className="fixed right-5" onClick={setShowDetails}><FaArrowAltCircleLeft className="w-8 h-8 text-black dark:text-red-500" /></p>
         <img src={product.image || "https://via.placeholder.com/150"} alt={product.name} className="w-full h-40  border-2 border-gray-400 object-cover rounded-md" />
-        <h2 className="text-lg font-semibold mt-3 text-black dark:text-white">{product.name}</h2>
-        <p className="text-gray-600 dark:text-gray-300 text-sm">Category: {product.category}</p>
+        <h2 className="text-lg font-heading dark:text-green-500 font-semibold mt-3  text-center">{product.name}</h2>
+        <p className="text-gray-600 dark:text-gray-300 text-sm"><strong>Category:</strong> {product.category}</p>
 
         <div className="mt-2 space-y-1 text-gray-700 dark:text-gray-300 text-sm">
           <p><strong>Cost Price:</strong> ₹{product.costPrice}</p>

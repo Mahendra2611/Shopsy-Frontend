@@ -132,7 +132,7 @@ const [availableCategories,setCategories] = useState([]);
         name="category"
         value={formData.category}
         onChange={handleChange}
-        className="w-full bg-transparent outline-none dark:bg-gray-900 text-gray-900 dark:text-white"
+        className=" text-[14px] w-[60%] md:w-full md:text-xl bg-transparent outline-none dark:bg-gray-900 text-gray-900 dark:text-white"
         required
       >
         <option value="">Select Category</option>

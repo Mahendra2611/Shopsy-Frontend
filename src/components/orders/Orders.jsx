@@ -70,8 +70,7 @@ useEffect(() => {
         
       }
     } catch (error) {
-      //console.log(error)
-      //toast.error(error.response?.data?.message || "Something went wrong!");
+      
     }
     setViewDetails(false);
   };
@@ -157,7 +156,7 @@ if(loading){
 
       </div>
     </div>
-  ):(<OrderDetails handleUpdateStatus={handleUpdateStatus} order={order}/>);
+  ):(<OrderDetails handleUpdateStatus={handleUpdateStatus} order={order} setViewDetails={()=>setViewDetails(false)}/>);
 };
 
 export default Orders;

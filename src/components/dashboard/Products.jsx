@@ -15,15 +15,13 @@ const Products = () => {
   const navigate = useNavigate();
   const { callApi ,loading} = useAPI();
   const { products } = useSelector((state) => state.products);
- 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [showDetails,setShowDetails] = useState(false);
   const [product,setProduct] = useState({});
+
   const handleDelete = async () => {
-    console.log("Delete called");
-    
     const response = await callApi({
       url: `api/products/delete/${product._id}`,
       method: "DELETE",
@@ -43,20 +41,18 @@ const Products = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      console.log("called");
+     
       const response = await callApi({
         url: `api/products`,
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-      console.log(response);
+     // console.log(response);
       if (response) {
         setSelectedCategory(response[0].category)
         dispatch(addProducts(response));
-        //toast.success("Products loaded successfully!");
-      } else {
-       // toast.error("Failed to fetch products. Please try again.");
-      }
+  
+      } 
     };
     fetchProducts();
   }, []);
@@ -130,7 +126,7 @@ const Products = () => {
         </div>
       </div>
     </div>
-  ):(<ProductDetails product={product} handleDelete={handleDelete} showConfirm={showConfirm} setShowConfirm={setShowConfirm} navigate={navigate} loading={loading}/>);
+  ):(<ProductDetails product={product} handleDelete={handleDelete} showConfirm={showConfirm} setShowConfirm={setShowConfirm} navigate={navigate} loading={loading} setShowDetails={()=>setShowDetails(false)}/>);
 };
 
 export default Products;

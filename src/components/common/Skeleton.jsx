@@ -23,7 +23,7 @@ const SkeletonCard = () => {
 
   export const DashboardSkeleton = () => {
     return (
-      <div className="flex-1 p-6 bg-background-light dark:bg-background-dark">
+      <div className="flex-1 p-6 h-[100vh] bg-background-light dark:bg-background-dark">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6 animate-pulse bg-gray-300 dark:bg-gray-700 h-8 w-48 rounded"></h2>
   
         {/* Action Buttons Skeleton */}

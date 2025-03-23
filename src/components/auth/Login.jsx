@@ -4,7 +4,7 @@ import useAPI from "../../hooks/useAPI";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addOwner } from "../../redux/AuthSlice";
-import toast from "react-hot-toast";
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -84,16 +84,16 @@ const Login = () => {
       data: requestData,
       headers: { "Content-Type": "application/json" },
     });
-    console.log(response)
+   
     if (response) {
-      toast.success("Login successful!");
-      console.log(response)
-      const owner = {"email":response.owner.email,"name":response.owner.ownerName}
-      console.log(owner);
+      
+      const owner = {"email":response?.email||"","name":response?.name||""}
+     
       localStorage.setItem("owner", JSON.stringify(owner));
-      dispatch(addOwner({owner:owner,category:response.owner.itemCategories}));
+      dispatch(addOwner({owner:owner}));
       navigate("/dashboard");
-    } else {
+    } 
+    else {
       
     }
   };

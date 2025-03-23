@@ -1,12 +1,8 @@
-import { useParams,useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import { useEffect, useState } from "react";
-import useAPI from "../../hooks/useAPI";
-import { toast } from "react-toastify";
-import { updateOrder } from "../../redux/OrderSlice";
 
-const OrderDetails = ({handleUpdateStatus,order}) => {
+import { FaCheckCircle, FaTimesCircle,FaArrowAltCircleLeft } from "react-icons/fa";
+
+
+const OrderDetails = ({handleUpdateStatus,order,setViewDetails}) => {
 //   console.log("called")
 //  console.log(handleUpdateStatus)
 //  console.log(order)
@@ -18,7 +14,9 @@ const OrderDetails = ({handleUpdateStatus,order}) => {
   
 
   return (
-    <div className="max-w-4xl mx-auto bg-white dark:bg-gray-800 p-5 shadow-lg rounded-lg">
+    <div className="dark:bg-background-dark">
+      <div className="max-w-3xl mx-auto bg-white dark:bg-gray-600 p-5 shadow-lg ">
+      <p className="fixed right-5" onClick={setViewDetails}><FaArrowAltCircleLeft className="w-8 h-8 text-black dark:text-red-500" /></p>
       <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Order Details</h2>
 
       <div className="space-y-3">
@@ -80,6 +78,7 @@ const OrderDetails = ({handleUpdateStatus,order}) => {
         </button>
         </div>
         ) }
+    </div> 
     </div>
   );
 };
