@@ -1,5 +1,6 @@
 
 import { IoClose, IoTrash, IoPencil } from "react-icons/io5";
+import EmptyState from "../common/EmptyState";
 
 
 const ProductDetails = ({product,handleDelete,showConfirm,setShowConfirm,navigate,loading}) => {
@@ -7,7 +8,7 @@ const ProductDetails = ({product,handleDelete,showConfirm,setShowConfirm,navigat
 //  console.log(handleDelete)
 // console.log(showConfirm)
   if (!product) {
-    return <p className="text-center text-gray-600 dark:text-gray-300">Product not found.</p>;
+    return <p className="text-center text-gray-600 dark:text-gray-300"><EmptyState message="No Product Found"/></p>;
   }
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -15,7 +16,7 @@ const ProductDetails = ({product,handleDelete,showConfirm,setShowConfirm,navigat
         {/* <button onClick={() => navigate(-1)} className="absolute top-3 right-3 text-gray-600 hover:text-red-500">
           <IoClose size={24} />
         </button> */}
-        <img src={product.image || "https://via.placeholder.com/150"} alt={product.name} className="w-full h-40 object-cover rounded-md" />
+        <img src={product.image || "https://via.placeholder.com/150"} alt={product.name} className="w-full h-40  border-2 border-gray-400 object-cover rounded-md" />
         <h2 className="text-lg font-semibold mt-3 text-black dark:text-white">{product.name}</h2>
         <p className="text-gray-600 dark:text-gray-300 text-sm">Category: {product.category}</p>
 

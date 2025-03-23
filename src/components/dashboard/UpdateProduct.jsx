@@ -96,7 +96,7 @@ const UpdateProduct = () => {
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center p-4">
   <div className="w-full max-w-lg p-6 sm:p-8 bg-white dark:bg-gray-900 shadow-xl rounded-2xl">
-    <h2 className="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-white">Add Product</h2>
+    <h2 className="text-3xl font-bold text-center font-heading mb-6 text-gray-900 dark:text-white">Update Product</h2>
 
     <form  className="space-y-5">
       {[

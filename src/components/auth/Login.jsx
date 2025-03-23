@@ -101,8 +101,8 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-cyan-100 dark:bg-gray-900">
       <div className="w-full max-w-md mx-3 md:mx-0 p-8 shadow-2xl bg-white dark:bg-gray-800 rounded-lg">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 text-center mb-6">
-          Shop Owner Login
+        <h2 className="text-2xl font-bold font-heading text-gray-800 dark:text-gray-200 text-center mb-6">
+           Login
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">

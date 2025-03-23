@@ -11,7 +11,7 @@ const SkeletonCard = () => {
   
   const Skeleton = ({ count = 6 }) => {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-2 bg-background-light dark:bg-background-dark md:grid-cols-3 lg:grid-cols-4 gap-3">
+      <div className="grid h-[100vh] grid-cols-2 sm:grid-cols-2 bg-background-light dark:bg-background-dark md:grid-cols-3 lg:grid-cols-4 gap-3">
         {Array.from({ length: count }).map((_, index) => (
           <SkeletonCard key={index} />
         ))}

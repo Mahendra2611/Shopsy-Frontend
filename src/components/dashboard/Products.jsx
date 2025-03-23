@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { deleteProduct } from "../../redux/ProductSlice";
 import ProductDetails from "./ProductDetails";
 import Skeleton from "../common/Skeleton";
+import EmptyState from "../common/EmptyState";
 
 
 const Products = () => {
@@ -69,18 +70,18 @@ const Products = () => {
    }
 
   return (!showDetails)?(
-    <div className="flex min-h-screen bg-gray-100 dark:bg-gray-800">
+    <div className="flex min-h-screen pl-6 bg-gray-100 dark:bg-gray-800">
       {/* Sidebar */}
       <div className={`fixed top-16 md:top-0  left-0 h-[100vh] w-64 bg-white dark:bg-gray-900 shadow-xl p-6 transition-transform transform ${
     sidebarOpen ? "translate-x-0" : "-translate-x-full"
   } md:relative md:translate-x-0 md:w-60`}
 >
-        <h2 className="text-xl font-bold text-gray-700 dark:text-gray-200 mb-6">Categories</h2>
+        <h2 className="text-xl font-bold text-gray-700 font-heading text-center dark:text-gray-200 mb-6">Categories</h2>
         <ul className="spce-y-1 md:space-y-2 dark:text-white">
           {categories.map((category,index) => (
             <li
               key={index}
-              className={`cursor-pointer p-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-blue-500 ${
+              className={`cursor-pointer font-sub-heading p-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-blue-500 ${
                 selectedCategory === category ? "bg-gray-300 dark:bg-gray-700" : ""
               }`}
               onClick={() => {setSelectedCategory(category);setSidebarOpen(false)}}
@@ -93,14 +94,14 @@ const Products = () => {
       
 
       <button
-  className="fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-t-lg shadow-lg"
-  onClick={() => setSidebarOpen(!sidebarOpen)}
->
-  {sidebarOpen ? "Close Sidebar" : "Open Sidebar"}
-</button>
+        className="z-100 fixed left-0 md:hidden  top-1/2  transform  -translate-x-14 rotate-90 bg-gradient-to-r from-blue-500 to-purple-500  text-white px-4 py-2 rounded-t-lg shadow-lg"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+      >
+        {sidebarOpen ? "Close Dashboard" : "Open Dashboard"}
+      </button>
       {/* Main Content */}
       <div className="flex-1 p-3 md:p-6">
-        <h2 className="text-2xl font-bold text-center mb-6 text-black dark:text-white">
+        <h2 className="text-2xl md:text-3xl md:font-extrabold font-bold font-heading text-center mb-6 text-black dark:text-white">
           {selectedCategory ? `${selectedCategory} Products` : "Select a Category"}
         </h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
@@ -110,7 +111,7 @@ const Products = () => {
                 <img
                   src={product.image || "https://via.placeholder.com/150"}
                   alt={product.name}
-                  className="w-full h-32 md:h-48 object-cover rounded-md"
+                  className="w-full h-28 md:h-36 object-cover border-2 border-gray-400 rounded-md"
                 />
                 <h3 className="text-sm md:text-lg font-semibold mt-2 text-black dark:text-white">{product.name}</h3>
                 <p className="text-[13px] md:text-xl text-gray-600 dark:text-gray-300">Category: {product.category}</p>
@@ -124,7 +125,7 @@ const Products = () => {
               </div>
             ))
           ) : (
-            <p className="text-center text-gray-600 dark:text-gray-300">No products available for this category.</p>
+            <EmptyState message="No Products Available"/>
           )}
         </div>
       </div>

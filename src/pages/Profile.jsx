@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import useAPI from "../hooks/useAPI";
 import { FaUser } from "react-icons/fa";
-
+import { XCircle } from "lucide-react";
+import ProfileSkeleton from "../components/common/ProfileSkeleton";
+import ProfileLogo from "../assets/profile-logo.jpeg"
 const Profile = () => {
   const [ownerData, setOwnerData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -11,7 +13,7 @@ const Profile = () => {
 
   // Fetch owner data on page load
 
-  const {callApi} = useAPI();
+  const {callApi,loading,error} = useAPI();
   useEffect(() => {
     const fetchOwnerData = async () => {
       try {
@@ -44,7 +46,7 @@ const Profile = () => {
 }, []);
 
 
-  if (!ownerData || !formData) return <p>Loading...</p>;
+  if (!ownerData || !formData) return <p><ProfileSkeleton/></p>;
 
   // Handle Form Input Changes
   const handleChange = (e) => {
@@ -114,19 +116,19 @@ const Profile = () => {
     <div className="min-h-screen bg-background-light dark:bg-background-dark text-gray-900 dark:text-white p-4 sm:p-6">
     <div className="max-w-4xl mx-auto bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
       {/* Profile Section */}
-      <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-4">
+      <div className="flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
         <img
-          src={ownerData?.shopImage  }
-          alt={<FaUser/>}
-          className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border border-gray-300 dark:border-gray-700 object-cover"
+          src={ownerData?.shopImage ? ownerData?.shopImage : ProfileLogo}
+          alt="Profile Image"
+          className="w-24 h-24 sm:w-28 sm:h-28 rounded-full border border-gray-300 dark:border-gray-700 object-cover shadow-md"
         />
         <div className="text-center sm:text-left">
-          <h2 className="text-xl sm:text-2xl font-semibold">{ownerData.ownerName}</h2>
-          <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">{ownerData.email}</p>
+          <h2 className="text-2xl sm:text-3xl font-heading  font-bold text-gray-900 dark:text-white">{ownerData.ownerName.replace(/^./,(match)=>match.toUpperCase())}</h2>
+          <p className="text-gray-600 my-2 dark:text-gray-400 text-sm sm:text-base">{ownerData.email}</p>
           <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">{ownerData.mobileNumber}</p>
         </div>
         <button
-          className="sm:ml-auto w-full sm:w-auto px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+          className="sm:ml-auto w-full sm:w-auto px-5 py-2.5 rounded-lg text-white font-semibold transition bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 shadow-lg"
           onClick={() => setIsEditing(!isEditing)}
         >
           {isEditing ? "Cancel" : "Edit"}
@@ -236,30 +238,36 @@ const Profile = () => {
       ) : (
         <>
           {/* Shop Information */}
-          <div>
-            <h3 className="text-lg sm:text-xl font-semibold">Shop Information</h3>
-            <p className="text-gray-700 dark:text-gray-400 text-sm sm:text-base">Shop Name: {ownerData.shopName}</p>
-            <p className="text-gray-700 dark:text-gray-400 text-sm sm:text-base">Category: {ownerData.shopCategory}</p>
-            <p className="text-gray-700 dark:text-gray-400 text-sm sm:text-base">Address: {ownerData.shopAddress}</p>
-          </div>
-  
-          <div className="flex flex-wrap gap-2">
-              {ownerData.itemCategories.map((category, index) => (
-                <span
-                  key={index}
-                  className="bg-blue-500 text-white px-2 py-1 rounded flex items-center space-x-1"
-                >
-                  {category}
-                  <button
-                    type="button"
-                    className="ml-1 text-sm text-white hover:text-red-500"
-                    onClick={() => removeCategory(category)}
-                  >
-                    ✕
-                  </button>
-                </span>
-              ))}
-            </div>
+          <div className="p-6 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border dark:border-gray-700 max-w-lg mx-auto">
+      <h3 className="text-xl font-heading sm:text-2xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+        🏪 Shop Information
+      </h3>
+      <div className="space-y-2 text-gray-700 dark:text-gray-400">
+        <p className="text-base sm:text-lg"><strong>Shop Name:</strong> {ownerData.shopName}</p>
+        <p className="text-base sm:text-lg"><strong>Category:</strong> {ownerData.shopCategory}</p>
+        <p className="text-base sm:text-lg"><strong>Address:</strong> {ownerData.shopAddress}</p>
+      </div>
+      <div className="mt-4">
+        <h4 className="text-lg font-semibold text-gray-900 dark:text-white">Item Categories</h4>
+        <div className="flex flex-wrap gap-2 mt-2">
+          {ownerData.itemCategories.map((category, index) => (
+            <span
+              key={index}
+              className="bg-gradient-to-r from-green-400 to-blue-500 text-white px-3 py-1.5 rounded-lg flex items-center space-x-2 shadow-md hover:bg-blue-700 transition"
+            >
+              <span className="text-sm font-medium">{category}</span>
+              <button
+                type="button"
+                className="text-white hover:text-red-500 transition"
+                onClick={() => removeCategory(category)}
+              >
+                <XCircle size={16} />
+              </button>
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
           {/* Google Maps Location */}
           {ownerData.shopLocation?.coordinates && (
             <div className="mt-4">
