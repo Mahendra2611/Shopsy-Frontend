@@ -14,7 +14,7 @@ const ProductDetails = ({product,handleDelete,showConfirm,setShowConfirm,navigat
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       
       <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-96 relative">
-      <p className="fixed right-5" onClick={setShowDetails}><FaArrowAltCircleLeft className="w-8 h-8 text-black dark:text-red-500" /></p>
+      <p className="fixed left-2" onClick={setShowDetails}><FaArrowAltCircleLeft className="w-8 h-8 text-red-500" /></p>
         <img src={product.image || "https://via.placeholder.com/150"} alt={product.name} className="w-full h-40  border-2 border-gray-400 object-cover rounded-md" />
         <h2 className="text-lg font-heading dark:text-green-500 font-semibold mt-3  text-center">{product.name}</h2>
         <p className="text-gray-600 dark:text-gray-300 text-sm"><strong>Category:</strong> {product.category}</p>

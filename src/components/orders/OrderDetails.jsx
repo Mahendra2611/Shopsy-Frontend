@@ -1,30 +1,26 @@
 
 import { FaCheckCircle, FaTimesCircle,FaArrowAltCircleLeft } from "react-icons/fa";
+import EmptyState from "../common/EmptyState";
 
 
 const OrderDetails = ({handleUpdateStatus,order,setViewDetails}) => {
-//   console.log("called")
-//  console.log(handleUpdateStatus)
-//  console.log(order)
-  if (!order) {
-    return <p className="text-center text-gray-500">Order not found.</p>;
-  }
 
-  // Function to update order status
-  
+  if (!order) {
+    return <EmptyState message="order not found"/>;
+  }
 
   return (
     <div className="dark:bg-background-dark">
       <div className="max-w-3xl mx-auto bg-white dark:bg-gray-600 p-5 shadow-lg ">
-      <p className="fixed right-5" onClick={setViewDetails}><FaArrowAltCircleLeft className="w-8 h-8 text-black dark:text-red-500" /></p>
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Order Details</h2>
+      <p className="fixed left-5" onClick={setViewDetails}><FaArrowAltCircleLeft className="w-8 h-8  text-red-500" /></p>
+      <h2 className="text-xl md:text-2xl text-center font-heading text-green-400 font-semibold  mb-4">Order Details</h2>
 
       <div className="space-y-3">
         <p className="text-gray-700 dark:text-gray-300"><strong>Order ID:</strong> {order._id}</p>
         <p className="text-gray-700 dark:text-gray-300"><strong>Customer ID:</strong> {order.customerId}</p>
 
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Products:</h3>
+          <h3 className="text-lg md:text-2xl font-semibold text-green-400 font-heading text-center">Product Details:</h3>
           {order.products.map((product) => (
             <div key={product._id} className="border-b border-gray-300 dark:border-gray-600 py-2">
               <p className="text-gray-700 dark:text-gray-300"><strong>Name:</strong> {product.name}</p>

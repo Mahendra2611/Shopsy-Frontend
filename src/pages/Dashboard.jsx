@@ -1,13 +1,5 @@
 import { useState, useEffect } from "react";
-import {
-  PlusCircle,
-  PackageCheck,
-  Package,
-  ShoppingCart,
-  BarChart,
-  AlertTriangle,
-  User,
-} from "lucide-react";
+import {PlusCircle, PackageCheck,Package,ShoppingCart,BarChart,AlertTriangle,User,} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useAPI from "../hooks/useAPI";
 import { DashboardSkeleton } from "../components/common/Skeleton";
@@ -17,7 +9,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [stats, setStats] = useState({ totalProducts: 0, lowStock: 0, pendingOrders: 0 });
-  const { callApi, loading } = useAPI();
+  const { callApi, loading ,error} = useAPI();
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -28,9 +20,9 @@ const Dashboard = () => {
       });
       if (data) {
         setStats({
-          totalProducts: data.totalProducts || 0,
-          lowStock: data.lowStock || 0,
-          pendingOrders: data.pendingOrders || 0,
+          totalProducts: data?.totalProducts || 0,
+          lowStock: data?.lowStock || 0,
+          pendingOrders: data?.pendingOrders || 0,
         });
       }
     };
@@ -94,13 +86,13 @@ const Dashboard = () => {
         {/* Action Buttons */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <button
-            className="flex font-sub-heading items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-pink-600 hover:to-purple-500 text-white font-bold py-3 rounded-lg shadow-lg transition-all text-lg tracking-wide"
+            className="flex hover:cursor-pointer font-sub-heading items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-pink-600 hover:to-purple-500 text-white font-bold py-3 rounded-lg shadow-lg transition-all text-lg tracking-wide"
             onClick={() => navigate("/addProducts")}
           >
             <PlusCircle className="w-6 h-6" /> Add Product
           </button>
           <button
-            className="flex items-center font-sub-heading justify-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-cyan-600 hover:to-teal-500 text-white font-bold py-3 rounded-lg shadow-lg transition-all text-lg tracking-wide"
+            className="flex hover:cursor-pointer items-center font-sub-heading justify-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-cyan-600 hover:to-teal-500 text-white font-bold py-3 rounded-lg shadow-lg transition-all text-lg tracking-wide"
             onClick={() => navigate("/dashboard/orders")}
           >
             <PackageCheck className="w-6 h-6" /> Handle Orders
@@ -114,7 +106,7 @@ const Dashboard = () => {
               <h3 className="text-sm font-sub-heading md:text-lg font-semibold">{label}</h3>
               <p className="text-2xl font-bold">{value}</p>
               <button
-                className="mt-2 text-black bg-white px-3 py-1 rounded-md"
+                className="mt-2 hover:cursor-pointer text-black bg-white px-3 py-1 rounded-md"
                 onClick={() => navigate(path)}
               >
                 Visit {label}

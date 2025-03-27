@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 const useAPI = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
+    console.log(loading)
     const callApi = async ({ url, method = "GET", data = {}, headers = {} }) => {
         setLoading(true);
         setError(null);

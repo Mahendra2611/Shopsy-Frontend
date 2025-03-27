@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 const UpdateProduct = () => {
 
     
-  const categorizedProducts = useSelector((state) => state.products.products);
+  const categorizedProducts = useSelector((state) => state?.products?.products||{});
     let categories = [];
   if(categorizedProducts){
       for(const key in categorizedProducts){
@@ -40,7 +40,7 @@ const UpdateProduct = () => {
 
   const [listeningField, setListeningField] = useState(null);
   const { callApi, loading ,error} = useAPI();
-  console.log(loading)
+ console.log(loading)
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -80,16 +80,13 @@ const UpdateProduct = () => {
         method: "PUT",
         data: formDataToSend,
       });
-      console.log(response)
+     
       if (response) {
-        dispatch(updateProduct(response.product));
-        toast.success("Product updated successfully!");
-        navigate("/dashboard");
-      } else {
-       // toast.error("Error updating product");
+       
+        navigate("/dashboard/products");
       }
     } catch (err) {
-      //toast.error("Error updating product");
+     
     }
   };
 
@@ -156,7 +153,7 @@ const UpdateProduct = () => {
           <FaImage className="text-gray-500 dark:text-gray-300 text-lg" />
           <span>Upload Product Image</span>
         </label>
-        <input type="file" name="image" onChange={handleFileChange} className="" required />
+        <input type="file" name="image" onChange={handleFileChange} className="text-black dark:text-white text-center" required />
       </div>
 
       {/* Submit Button */}
