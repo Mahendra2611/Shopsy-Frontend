@@ -1,11 +1,11 @@
 import { useState } from "react";
 import axios from "axios";
-import { toast } from "react-hot-toast"; // Import react-hot-toast
+import { toast } from "react-hot-toast"; 
 
 const useAPI = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
+    console.log(loading)
     const callApi = async ({ url, method = "GET", data = {}, headers = {} }) => {
         setLoading(true);
         setError(null);
@@ -23,11 +23,11 @@ const useAPI = () => {
             });
 
             console.log(response);
+            setLoading(false);
             if (response && (response.status === 201 || response.status === 200)) {
                 return response.data;
             } else {
-                setLoading(false);
-                return null;
+               throw new Error()
             }
         } catch (err) {
             console.log(err)
@@ -39,7 +39,7 @@ const useAPI = () => {
         } finally {
             setLoading(false);
         }
-        console.log(loading)
+       
     };
 
     return { callApi, loading, error };

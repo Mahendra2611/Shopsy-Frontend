@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import useAPI from "../hooks/useAPI";
 import { useNavigate } from "react-router-dom";
 import { Mic, MicOff, Upload, Loader2 } from "lucide-react";
-import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+
 
 const AddProduct = () => {
- // console.log(availableCategories)
+ 
   const [formData, setFormData] = useState({
     name: "",
     category: "",
@@ -60,11 +59,10 @@ const [availableCategories,setCategories] = useState([]);
         headers:{"Content-Type":"multipart/form-data"}
       });
       if (response) {
-       // toast.success("Product added successfully!");
         navigate("/dashboard");
       }
     } catch (err) {
-      //toast.error("Error adding product");
+     
     }
   };
   useEffect(()=>{
@@ -74,9 +72,9 @@ const [availableCategories,setCategories] = useState([]);
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-      console.log(data);
+   
       if (data) {
-        setCategories(data?.categories?.itemCategories        );
+        setCategories(data?.categories?.itemCategories||["Not Available"]);
       }
     }
     getCategories();
@@ -84,7 +82,7 @@ const [availableCategories,setCategories] = useState([]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center px-4">
       <div className="w-full max-w-md p-6 sm:p-8 bg-white dark:bg-gray-800 shadow-xl rounded-2xl">
-        <h2 className="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-white">Add Product</h2>
+        <h2 className="text-3xl font-heading text-cyan-500 font-bold text-center mb-6  ">Add Product</h2>
         <form  className="space-y-5">
   {["name", "salesPrice", "costPrice", "weight", "quantity", "lowStockThreshold", "discount"].map((field, index) => (
     <div key={index}>
@@ -132,7 +130,7 @@ const [availableCategories,setCategories] = useState([]);
         name="category"
         value={formData.category}
         onChange={handleChange}
-        className="w-full bg-transparent outline-none dark:bg-gray-900 text-gray-900 dark:text-white"
+        className=" text-[14px] w-[60%] md:w-full md:text-xl bg-transparent outline-none dark:bg-gray-900 text-gray-900 dark:text-white"
         required
       >
         <option value="">Select Category</option>
