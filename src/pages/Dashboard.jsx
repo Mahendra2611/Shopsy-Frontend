@@ -20,7 +20,7 @@ const openShop = async()=>{
     headers: { "Content-Type": "application/json" },
     data:newStatus
   });
-  console.log(data)
+ // console.log(data)
   setStatus(data?.shopStatus || "")
 }
   useEffect(() => {
