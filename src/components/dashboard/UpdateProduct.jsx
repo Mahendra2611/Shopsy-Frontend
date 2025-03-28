@@ -3,11 +3,8 @@ import React, { useState } from "react";
 import useAPI from "../../hooks/useAPI";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaImage, FaMicrophone } from "react-icons/fa";
-import toast from "react-hot-toast";
+
 import { useSelector } from "react-redux";
-
-
-
 const UpdateProduct = () => {
 
     
