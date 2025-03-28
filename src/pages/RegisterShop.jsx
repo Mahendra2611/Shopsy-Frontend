@@ -18,8 +18,11 @@ const RegisterShop = () => {
     itemCategories: [],
     shopImage:'',
     shopLocation: { type: 'Point', coordinates: [0, 0] },
-  });
+    openingTime:'',
+    closingTime:''
 
+  });
+console.log(formData)
   const [listeningField, setListeningField] = useState(null);
   const [newCategory, setNewCategory] = useState("");
 
@@ -181,7 +184,26 @@ console.log(formData)
                 ))}
               </select>
             </div>
+            {/* Opening and closing Timing */}
+            <div className="block text-gray-700 dark:text-gray-300">
+            <label className="block text-gray-700 dark:text-gray-300">Opening Time</label>
+            <input 
+  type="time" 
+  name="openingTime" 
+  onChange={(e) => setFormData({ ...formData, openingTime: e.target.value })} 
+  required 
+  className="border p-2 rounded w-full"
+/>
+<label className="block text-gray-700 dark:text-gray-300">Closing Time</label>
+<input 
+  type="time" 
+  name="closingTime" 
+  onChange={(e) => setFormData({ ...formData, closingTime: e.target.value })} 
+  required 
+  className="border p-2 rounded w-full mt-2"
+/>
 
+            </div>
 
 <div>
               <label className="block text-gray-700 dark:text-gray-300">Product Categories</label>

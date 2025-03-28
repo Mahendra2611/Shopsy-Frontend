@@ -10,7 +10,7 @@ const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [stats, setStats] = useState({ totalProducts: 0, lowStock: 0, pendingOrders: 0 });
   const { callApi, loading ,error} = useAPI();
-
+const [status,setStatus] = useState("");
   useEffect(() => {
     const fetchStats = async () => {
       const data = await callApi({
@@ -18,12 +18,14 @@ const Dashboard = () => {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
+      console.log(data)
       if (data) {
         setStats({
-          totalProducts: data?.totalProducts || 0,
-          lowStock: data?.lowStock || 0,
-          pendingOrders: data?.pendingOrders || 0,
+          totalProducts: data?.stats?.totalProducts || 0,
+          lowStock: data?.stats?.lowStock || 0,
+          pendingOrders: data?.stats?.pendingOrders || 0,
         });
+        setStatus(data?.shopStatus?.shopStatus)
       }
     };
     fetchStats();
@@ -47,7 +49,9 @@ const Dashboard = () => {
     { label: "Pending Orders", value: stats.pendingOrders, color: "from-green-500 to-emerald-600", path: "/dashboard/orders" },
   ];
 
-  return (
+  return (status === "CLOSE")?(<div className="fixed inset-0 ">
+
+  </div>):(
     <div className="flex min-h-screen bg-background-light dark:bg-background-dark">
       {/* Sidebar */}
       <div
@@ -96,6 +100,12 @@ const Dashboard = () => {
             onClick={() => navigate("/dashboard/orders")}
           >
             <PackageCheck className="w-6 h-6" /> Handle Orders
+          </button>
+          <button
+            className={`flex  items-center font-sub-heading justify-center gap-2 ${status == "CLOSE" ? "bg-red-500" : "bg-green-500"}  text-white font-bold py-3 rounded-lg shadow-lg transition-all text-lg tracking-wide`}
+           
+          >
+           Shop Status : {status}
           </button>
         </div>
 
