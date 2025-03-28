@@ -52,7 +52,7 @@ const {callApi,loading} = useAPI();
               <img
                 src={product.image || "https://via.placeholder.com/150"}
                 alt={product.name}
-                className="w-full h-32 md:h-48 object-cover rounded-md"
+                className="w-full h-20 border-2 border-gray-500 md:h-32 object-contain rounded-md"
               />
               <h3 className="text-sm md:text-lg font-semibold mt-2 text-black dark:text-white">{product.name}</h3>
               <p className="text-[13px] md:text-xl text-gray-600 dark:text-gray-300">Category: {product.category}</p>
