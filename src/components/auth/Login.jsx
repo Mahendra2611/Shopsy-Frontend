@@ -4,7 +4,7 @@ import useAPI from "../../hooks/useAPI";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addOwner } from "../../redux/AuthSlice";
-import toast from "react-hot-toast";
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -84,16 +84,16 @@ const Login = () => {
       data: requestData,
       headers: { "Content-Type": "application/json" },
     });
-    console.log(response)
+   
     if (response) {
-      toast.success("Login successful!");
-      console.log(response)
-      const owner = {"email":response.owner.email,"name":response.owner.ownerName}
-      console.log(owner);
+      
+      const owner = {"email":response?.email||"","name":response?.name||""}
+     
       localStorage.setItem("owner", JSON.stringify(owner));
-      dispatch(addOwner({owner:owner,category:response.owner.itemCategories}));
+      dispatch(addOwner({owner:owner}));
       navigate("/dashboard");
-    } else {
+    } 
+    else {
       
     }
   };
@@ -101,8 +101,8 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-cyan-100 dark:bg-gray-900">
       <div className="w-full max-w-md mx-3 md:mx-0 p-8 shadow-2xl bg-white dark:bg-gray-800 rounded-lg">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 text-center mb-6">
-          Shop Owner Login
+        <h2 className="text-2xl font-bold font-heading text-gray-800 dark:text-gray-200 text-center mb-6">
+           Login
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">

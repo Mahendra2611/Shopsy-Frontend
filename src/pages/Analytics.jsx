@@ -3,11 +3,13 @@ import { FaChartLine, FaShoppingCart, FaRupeeSign } from "react-icons/fa";
 import useAPI from "../hooks/useAPI";
 import { useParams } from "react-router-dom";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, LineChart, Line } from "recharts";
+import Skeleton from "../components/common/Skeleton";
+import AnalyticsSkeleton from "../components/common/AnalyticsSkeleton";
 
 const Analytics = () => {
   const [analytics, setAnalytics] = useState(null);
   const { shopId } = useParams();
-  const { callApi } = useAPI();
+  const { callApi,loading,error } = useAPI();
   const [dailyData, setDailyData] = useState([]);
   const [monthlyData, setMonthlyData] = useState([]);
   const [yearlyData, setYearlyData] = useState([]);
@@ -68,14 +70,14 @@ const Analytics = () => {
     fetchAnalytics();
   }, [shopId]);
 
-  if (!analytics) {
-    return <p className="text-center text-gray-500">Loading analytics...</p>;
+  if (!analytics || loading) {
+    return <AnalyticsSkeleton/>
   }
 
 
   return (
     <div className="p-6 max-w-6xl mx-auto bg-background-light dark:bg-background-dark min-h-screen transition-all">
-      <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">Shop Analytics</h2>
+      <h2 className="text-2xl font-bold mb-4 font-heading text-center text-gray-800 dark:text-gray-200">Shop Analytics</h2>
   
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="bg-blue-500 text-white p-4 rounded-lg shadow-md flex items-center gap-3">

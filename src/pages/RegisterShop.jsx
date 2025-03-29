@@ -18,6 +18,9 @@ const RegisterShop = () => {
     itemCategories: [],
     shopImage:'',
     shopLocation: { type: 'Point', coordinates: [0, 0] },
+    openingTime:'',
+    closingTime:''
+
   });
 
   const [listeningField, setListeningField] = useState(null);
@@ -26,10 +29,10 @@ const RegisterShop = () => {
   const dispatch = useDispatch();
   const { callApi, loading } = useAPI();
   const navigate = useNavigate();
-console.log(formData)
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(`${name} ${value}`)
+    //console.log(`${name} ${value}`)
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
   const addCategory = () => {
@@ -109,7 +112,7 @@ console.log(formData)
         toast.success("Login successful!");
       console.log(response)
       const owner = {"email":response.owner.email,"name":response.owner.ownerName}
-      console.log(owner);
+      //console.log(owner);
       localStorage.setItem("owner", JSON.stringify(owner));
       dispatch(addOwner(owner));
      
@@ -146,9 +149,9 @@ console.log(formData)
            .replace(/([A-Z])/g, ' $1') 
            .replace(/^./, (char) => char.toUpperCase()); 
           return (
-            <div>
+            <div key={index}>
               <label className="block text-gray-700 dark:text-gray-300">{formattedLabel}</label>
-            <div key={index} className="flex items-center border rounded p-2 bg-gray-100 dark:bg-gray-700">
+            <div  className="flex items-center border rounded p-2 bg-gray-100 dark:bg-gray-700">
               <input
                 type="text"
                 name={field}
@@ -174,6 +177,9 @@ console.log(formData)
                 onChange={handleChange}
                 className="w-full p-2 border rounded text-black dark:text-white bg-gray-100 dark:bg-gray-800"
               >
+                <option key={""} value={""}>
+                  {"Select Category"}
+                  </option>
                 {availableCategories.map((category) => (
                   <option key={category} value={category}>
                     {category}
@@ -181,7 +187,26 @@ console.log(formData)
                 ))}
               </select>
             </div>
+            {/* Opening and closing Timing */}
+            <div className="block text-gray-700 dark:text-gray-300">
+            <label className="block text-gray-700 dark:text-gray-300">Opening Time</label>
+            <input 
+  type="time" 
+  name="openingTime" 
+  onChange={(e) => setFormData({ ...formData, openingTime: e.target.value })} 
+  required 
+  className="border p-2 rounded w-full"
+/>
+<label className="block text-gray-700 dark:text-gray-300">Closing Time</label>
+<input 
+  type="time" 
+  name="closingTime" 
+  onChange={(e) => setFormData({ ...formData, closingTime: e.target.value })} 
+  required 
+  className="border p-2 rounded w-full mt-2"
+/>
 
+            </div>
 
 <div>
               <label className="block text-gray-700 dark:text-gray-300">Product Categories</label>
@@ -263,10 +288,10 @@ console.log(formData)
 
 
           {/* File Upload */}
-          <label className="flex items-center cursor-pointer bg-gray-200 dark:bg-gray-600 p-2 rounded justify-center">
+          <label className="flex flex-col items-center cursor-pointer bg-gray-200 dark:bg-gray-600 p-2 rounded justify-center">
             <FaImage className="text-gray-600 dark:text-white mr-2" />
             <span className="text-gray-700 dark:text-white">Upload Shop Image</span>
-            <input type="file" name="shopImage" onChange={handleFileChange} className="hidden" required />
+            <input type="file" name="shopImage" onChange={handleFileChange} className="text-center m-auto text-black dark:text-white" required />
           </label>
 
           {/* Submit Button */}

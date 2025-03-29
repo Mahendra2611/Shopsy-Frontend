@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import useAPI from "../hooks/useAPI";
 import Skeleton from "../components/common/Skeleton";
+import EmptyState from "../components/common/EmptyState";
 const LowStock = () => {
   const [products, setProducts] = useState([]);
   const [updatedQuantities, setUpdatedQuantities] = useState({});
@@ -42,7 +43,7 @@ const {callApi,loading} = useAPI();
   }
   return (
     <div className=" p-6 bg-background-light dark:bg-background-dark min-h-screen">
-      <h2 className="text-2xl font-bold mb-6 text-black dark:text-white">Low Stock Products</h2>
+      <h2 className="text-2xl font-bold mb-6 text-black font-heading text-center dark:text-white">Low Stock Products</h2>
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
         {products.length > 0 ? (
@@ -51,7 +52,7 @@ const {callApi,loading} = useAPI();
               <img
                 src={product.image || "https://via.placeholder.com/150"}
                 alt={product.name}
-                className="w-full h-32 md:h-48 object-cover rounded-md"
+                className="w-full h-20 border-2 border-gray-500 md:h-32 object-contain rounded-md"
               />
               <h3 className="text-sm md:text-lg font-semibold mt-2 text-black dark:text-white">{product.name}</h3>
               <p className="text-[13px] md:text-xl text-gray-600 dark:text-gray-300">Category: {product.category}</p>
@@ -66,7 +67,7 @@ const {callApi,loading} = useAPI();
             </div>
           ))
         ) : (
-          <p className="text-center text-gray-600 dark:text-gray-300">No low stock products found.</p>
+          <EmptyState message="No low stock products found."/>
         )}
       </div>
 

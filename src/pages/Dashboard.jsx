@@ -1,23 +1,28 @@
 import { useState, useEffect } from "react";
-import {
-  PlusCircle,
-  PackageCheck,
-  Package,
-  ShoppingCart,
-  BarChart,
-  AlertTriangle,
-  User,
-} from "lucide-react";
+import {PlusCircle, PackageCheck,Package,ShoppingCart,BarChart,AlertTriangle,User,} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useAPI from "../hooks/useAPI";
 import { DashboardSkeleton } from "../components/common/Skeleton";
-
+import ShopClosedPopup from "./ShopClosedPopUp";
+import { DoorOpen, DoorClosed } from "lucide-react";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [stats, setStats] = useState({ totalProducts: 0, lowStock: 0, pendingOrders: 0 });
-  const { callApi, loading } = useAPI();
+  const { callApi, loading ,error} = useAPI();
+const [status,setStatus] = useState("");
 
+const openShop = async()=>{
+  const newStatus = (status === "CLOSE") ? {status:"OPEN"} : {status:"CLOSE"};
+  const data = await callApi({
+    url: "api/dashboard/toggle-shop-status",
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data:newStatus
+  });
+ // console.log(data)
+  setStatus(data?.shopStatus || "")
+}
   useEffect(() => {
     const fetchStats = async () => {
       const data = await callApi({
@@ -25,12 +30,14 @@ const Dashboard = () => {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
+     // console.log(data)
       if (data) {
         setStats({
-          totalProducts: data.totalProducts || 0,
-          lowStock: data.lowStock || 0,
-          pendingOrders: data.pendingOrders || 0,
+          totalProducts: data?.stats?.totalProducts || 0,
+          lowStock: data?.stats?.lowStock || 0,
+          pendingOrders: data?.stats?.pendingOrders || 0,
         });
+        setStatus(data?.shopStatus?.shopStatus)
       }
     };
     fetchStats();
@@ -62,12 +69,12 @@ const Dashboard = () => {
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:relative md:translate-x-0 md:w-60`}
       >
-        <h2 className="text-xl font-bold text-gray-700 dark:text-gray-200 mb-6">Dashboard</h2>
-        <ul className="space-y-4 dark:text-white">
+        <h2 className="text-xl text-center font-heading font-bold text-gray-700 dark:text-gray-200 mb-6">Dashboard</h2>
+        <ul className="space-y-4 pl-2 dark:text-white">
           {menuItems.map(({ label, icon: Icon, path }) => (
             <li
               key={label}
-              className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-blue-500"
+              className="flex items-center font-sub-heading gap-3 cursor-pointer p-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-blue-500"
               onClick={() => navigate(path)}
             >
               <Icon size={20} className="text-gray-600 dark:text-gray-300" />
@@ -79,41 +86,62 @@ const Dashboard = () => {
 
       {/* Sidebar Toggle Button */}
       <button
-  className="fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-t-lg shadow-lg"
-  onClick={() => setSidebarOpen(!sidebarOpen)}
->
-  {sidebarOpen ? "Close Sidebar" : "Open Sidebar"}
-</button>
+        className="z-40 fixed left-0 md:hidden  top-1/2  transform  -translate-x-14 rotate-90 bg-gradient-to-r from-blue-500 to-purple-500  text-white px-4 py-2 rounded-t-lg shadow-lg"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+      >
+        {sidebarOpen ? "Close Dashboard" : "Open Dashboard"}
+      </button>
 
 
-      {/* Main Content */}
-      <div className="flex-1 p-6">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">Shop Dashboard</h2>
+      {/* Main Content */} 
+      <div className="flex-1 pl-8 pr-4">
+        <h2 className="text-2xl md:text-3xl mt-2 text-center font-heading font-bold md:font-extrabold text-gray-800 dark:text-gray-100 mb-6">Shop Dashboard</h2>
 
         {/* Action Buttons */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <button
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-pink-600 hover:to-purple-500 text-white font-bold py-3 rounded-lg shadow-lg transition-all text-lg tracking-wide"
+            className="flex hover:cursor-pointer font-sub-heading items-center justify-center gap-2 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-pink-600 hover:to-purple-500 text-white font-bold py-3 rounded-lg shadow-lg transition-all text-lg tracking-wide"
             onClick={() => navigate("/addProducts")}
           >
             <PlusCircle className="w-6 h-6" /> Add Product
           </button>
           <button
-            className="flex items-center justify-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-cyan-600 hover:to-teal-500 text-white font-bold py-3 rounded-lg shadow-lg transition-all text-lg tracking-wide"
+            className="flex hover:cursor-pointer items-center font-sub-heading justify-center gap-2 bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-cyan-600 hover:to-teal-500 text-white font-bold py-3 rounded-lg shadow-lg transition-all text-lg tracking-wide"
             onClick={() => navigate("/dashboard/orders")}
           >
             <PackageCheck className="w-6 h-6" /> Handle Orders
           </button>
+        
+
+<button
+  className={`flex items-center justify-center gap-2 px-6 py-3 text-white font-bold rounded-full shadow-lg transition-all text-lg tracking-wide 
+              ${status === "CLOSE" ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"} 
+              ring-1 ring-offset-2 ring-opacity-50 ring-white dark:ring-gray-600`}
+  onClick={() => openShop()}
+>
+  {status === "CLOSE" ? (
+    <>
+      <DoorOpen size={22} />
+      Open Shop
+    </>
+  ) : (
+    <>
+      <DoorClosed size={22} />
+      Close Shop
+    </>
+  )}
+</button>
+
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {statCards.map(({ label, value, color, path }) => (
             <div key={label} className={`bg-gradient-to-r ${color} text-white p-4 rounded-lg shadow-lg`}>
-              <h3 className="text-sm md:text-lg font-semibold">{label}</h3>
+              <h3 className="text-sm font-sub-heading md:text-lg font-semibold">{label}</h3>
               <p className="text-2xl font-bold">{value}</p>
               <button
-                className="mt-2 text-black bg-white px-3 py-1 rounded-md"
+                className="mt-2 hover:cursor-pointer text-black bg-white px-3 py-1 rounded-md"
                 onClick={() => navigate(path)}
               >
                 Visit {label}
@@ -122,6 +150,7 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
+      {status === "CLOSE" && <ShopClosedPopup openShop={openShop} />}
     </div>
   );
 };

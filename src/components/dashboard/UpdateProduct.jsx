@@ -3,15 +3,12 @@ import React, { useState } from "react";
 import useAPI from "../../hooks/useAPI";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaImage, FaMicrophone } from "react-icons/fa";
-import toast from "react-hot-toast";
+
 import { useSelector } from "react-redux";
-
-
-
 const UpdateProduct = () => {
 
     
-  const categorizedProducts = useSelector((state) => state.products.products);
+  const categorizedProducts = useSelector((state) => state?.products?.products||{});
     let categories = [];
   if(categorizedProducts){
       for(const key in categorizedProducts){
@@ -40,7 +37,7 @@ const UpdateProduct = () => {
 
   const [listeningField, setListeningField] = useState(null);
   const { callApi, loading ,error} = useAPI();
-  console.log(loading)
+ console.log(loading)
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -80,23 +77,20 @@ const UpdateProduct = () => {
         method: "PUT",
         data: formDataToSend,
       });
-      console.log(response)
+     
       if (response) {
-        dispatch(updateProduct(response.product));
-        toast.success("Product updated successfully!");
-        navigate("/dashboard");
-      } else {
-       // toast.error("Error updating product");
+       
+        navigate("/dashboard/products");
       }
     } catch (err) {
-      //toast.error("Error updating product");
+     
     }
   };
 
   return (
     <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center p-4">
   <div className="w-full max-w-lg p-6 sm:p-8 bg-white dark:bg-gray-900 shadow-xl rounded-2xl">
-    <h2 className="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-white">Add Product</h2>
+    <h2 className="text-3xl font-bold text-center font-heading mb-6 text-gray-900 dark:text-white">Update Product</h2>
 
     <form  className="space-y-5">
       {[
@@ -156,7 +150,7 @@ const UpdateProduct = () => {
           <FaImage className="text-gray-500 dark:text-gray-300 text-lg" />
           <span>Upload Product Image</span>
         </label>
-        <input type="file" name="image" onChange={handleFileChange} className="" required />
+        <input type="file" name="image" onChange={handleFileChange} className="text-black dark:text-white text-center" required />
       </div>
 
       {/* Submit Button */}

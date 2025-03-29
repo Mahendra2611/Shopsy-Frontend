@@ -7,22 +7,23 @@ import useAPI from "../../hooks/useAPI";
 import toast from "react-hot-toast";
 import OrderDetails from "./OrderDetails";
 import Skeleton from "../common/Skeleton";
+import EmptyState from "../common/EmptyState";
 
 const Orders = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  
   const { callApi,loading ,error} = useAPI();
   const { orders } = useSelector((state) => state.orders);
-  const shopId = "67c6f385a13214cb0b129350";
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("Pending");
 const [viewDetails,setViewDetails] = useState(false);
   const [orderId,setOrderId] = useState(null);
   const [order, setOrder] = useState(null);
-console.log(viewDetails)
+
 
 useEffect(() => {
-    // Find the order from Redux store
+    
     if(!orderId)return;
     let foundOrder = null;
     for (const status in orders) {
@@ -34,16 +35,15 @@ useEffect(() => {
 
   useEffect(() => {
     const fetchOrders = async () => {
-      //console.log("called");
+     
       const response = await callApi({
-        url: `api/order/shop/${shopId}`,
+        url: `api/order/shop`,
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-      //console.log(response);
+      
       if (response) {
-       
-        dispatch(addOrders(response.orders));
+        dispatch(addOrders(response?.orders));
         
       } else {
        
@@ -53,7 +53,7 @@ useEffect(() => {
   }, []);
 
   const handleUpdateStatus = async (status) => {
-    console.log("handle update called ",status)
+   
     try {
         const response = await callApi({
             url: `api/order/${orderId}/status`,
@@ -61,16 +61,15 @@ useEffect(() => {
             headers: { "Content-Type": "application/json" },
             data:{status}
           });
-         //console.log(response)
+        
       if (response) {
-        //console.log("Dispatched")
+       
         dispatch(updateOrder(response.order));
-        toast.success(`Order ${status} successfully!`);
+      
         
       }
     } catch (error) {
-      //console.log(error)
-      //toast.error(error.response?.data?.message || "Something went wrong!");
+      
     }
     setViewDetails(false);
   };
@@ -88,12 +87,12 @@ if(loading){
     sidebarOpen ? "translate-x-0" : "-translate-x-full"
   } md:relative md:translate-x-0 md:w-60`}
 >
-        <h2 className="text-xl font-bold text-gray-700 dark:text-gray-200 mb-6">Status</h2>
+        <h2 className="text-xl font-heading text-center font-bold text-gray-700 dark:text-gray-200 mb-6">Status</h2>
         <ul className="spce-y-1 md:space-y-2 dark:text-white">
           {statuses.map((status) => (
             <li
               key={status}
-              className={`cursor-pointer p-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-blue-500 ${
+              className={`cursor-pointer p-3 font-sub-heading rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 hover:text-blue-500 ${
                 selectedStatus === status ? "bg-gray-300 dark:bg-gray-700" : ""
               }`}
               onClick={() => {setSelectedStatus(status);setSidebarOpen(false)}}
@@ -106,15 +105,16 @@ if(loading){
       
 
       <button
-  className="fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-t-lg shadow-lg"
-  onClick={() => setSidebarOpen(!sidebarOpen)}
->
-  {sidebarOpen ? "Close Sidebar" : "Open Sidebar"}
-</button>
+        className="z-100 fixed left-0 md:hidden  top-1/2  transform  -translate-x-14 rotate-90 bg-gradient-to-r from-blue-500 to-purple-500  text-white px-4 py-2 rounded-t-lg shadow-lg"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+      >
+        {sidebarOpen ? "Close Dashboard" : "Open Dashboard"}
+      </button>
+
       {/* Main Content */}
-      <div className="flex-1 p-3 md:p-6">
-        <h2 className="text-2xl font-bold text-center mb-6 text-black dark:text-white">
-          {selectedStatus ? `${selectedStatus} Products` : "Select a Category"}
+      <div className="flex-1 pl-8 pr-2 md:p-6">
+        <h2 className="text-2xl md:text-3xl  font-bold font-heading  text-center mb-6 text-orange-300">
+          {selectedStatus ? `${selectedStatus} Orders` : "Select a Category"}
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
   {filteredOrders.length > 0 ? (
@@ -135,10 +135,10 @@ if(loading){
         </p>
 
         {/* Action Buttons */}
-        <div className="mt-3 flex flex-col space-y-2">
+        <div className="mt-3 flex  flex-col space-y-2">
 
           <button
-            className="bg-blue-500 text-white p-1 md:py-2 rounded text-sm md:text-lg hover:bg-blue-600"
+            className="bg-blue-500 hover:cursor-pointer text-white p-1 md:py-2 rounded text-sm md:text-lg hover:bg-blue-600"
             onClick={() => {setViewDetails(true),setOrderId(order._id)}}
           >
             View Details
@@ -148,14 +148,14 @@ if(loading){
     ))
   ) : (
     <p className="text-center text-gray-600 dark:text-gray-300">
-      No Orders available.
+      <EmptyState message="No Orders available."/>
     </p>
   )}
 </div>
 
       </div>
     </div>
-  ):(<OrderDetails handleUpdateStatus={handleUpdateStatus} order={order}/>);
+  ):(<OrderDetails handleUpdateStatus={handleUpdateStatus} order={order} setViewDetails={()=>setViewDetails(false)}/>);
 };
 
 export default Orders;
