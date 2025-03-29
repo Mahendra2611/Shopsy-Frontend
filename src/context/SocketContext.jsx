@@ -16,7 +16,7 @@ export const SocketProvider = ({ children }) => {
     if (!owner?.shopId) return;
 
     const newSocket = io("http://localhost:3000", { withCredentials: true });
-
+    console.log("",newSocket)
     newSocket.emit("joinShop", owner.shopId);
 
     newSocket.on("newOrder", (data) => {
