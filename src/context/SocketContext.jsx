@@ -16,7 +16,7 @@ export const SocketProvider = ({ children }) => {
     if (!id) return;
 
    //const newSocket = io("http://localhost:3000", { withCredentials: true });
-   const newSocket = io("https://shopsy-backend-gilt.vercel.app", { withCredentials: true });
+   const newSocket = io("https://shopsy-backend-gilt.vercel.app/", { withCredentials: true });
 
     newSocket.emit("joinShop", id);
 
