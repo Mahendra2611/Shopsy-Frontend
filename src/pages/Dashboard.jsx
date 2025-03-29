@@ -3,14 +3,26 @@ import {PlusCircle, PackageCheck,Package,ShoppingCart,BarChart,AlertTriangle,Use
 import { useNavigate } from "react-router-dom";
 import useAPI from "../hooks/useAPI";
 import { DashboardSkeleton } from "../components/common/Skeleton";
-
-
+import ShopClosedPopup from "./ShopClosedPopUp";
+import { DoorOpen, DoorClosed } from "lucide-react";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [stats, setStats] = useState({ totalProducts: 0, lowStock: 0, pendingOrders: 0 });
   const { callApi, loading ,error} = useAPI();
 const [status,setStatus] = useState("");
+
+const openShop = async()=>{
+  const newStatus = (status === "CLOSE") ? {status:"OPEN"} : {status:"CLOSE"};
+  const data = await callApi({
+    url: "api/dashboard/toggle-shop-status",
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data:newStatus
+  });
+ // console.log(data)
+  setStatus(data?.shopStatus || "")
+}
   useEffect(() => {
     const fetchStats = async () => {
       const data = await callApi({
@@ -18,7 +30,7 @@ const [status,setStatus] = useState("");
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-      console.log(data)
+     // console.log(data)
       if (data) {
         setStats({
           totalProducts: data?.stats?.totalProducts || 0,
@@ -49,9 +61,7 @@ const [status,setStatus] = useState("");
     { label: "Pending Orders", value: stats.pendingOrders, color: "from-green-500 to-emerald-600", path: "/dashboard/orders" },
   ];
 
-  return (status === "CLOSE")?(<div className="fixed inset-0 ">
-
-  </div>):(
+  return (
     <div className="flex min-h-screen bg-background-light dark:bg-background-dark">
       {/* Sidebar */}
       <div
@@ -76,7 +86,7 @@ const [status,setStatus] = useState("");
 
       {/* Sidebar Toggle Button */}
       <button
-        className="z-100 fixed left-0 md:hidden  top-1/2  transform  -translate-x-14 rotate-90 bg-gradient-to-r from-blue-500 to-purple-500  text-white px-4 py-2 rounded-t-lg shadow-lg"
+        className="z-40 fixed left-0 md:hidden  top-1/2  transform  -translate-x-14 rotate-90 bg-gradient-to-r from-blue-500 to-purple-500  text-white px-4 py-2 rounded-t-lg shadow-lg"
         onClick={() => setSidebarOpen(!sidebarOpen)}
       >
         {sidebarOpen ? "Close Dashboard" : "Open Dashboard"}
@@ -101,12 +111,27 @@ const [status,setStatus] = useState("");
           >
             <PackageCheck className="w-6 h-6" /> Handle Orders
           </button>
-          <button
-            className={`flex  items-center font-sub-heading justify-center gap-2 ${status == "CLOSE" ? "bg-red-500" : "bg-green-500"}  text-white font-bold py-3 rounded-lg shadow-lg transition-all text-lg tracking-wide`}
-           
-          >
-           Shop Status : {status}
-          </button>
+        
+
+<button
+  className={`flex items-center justify-center gap-2 px-6 py-3 text-white font-bold rounded-full shadow-lg transition-all text-lg tracking-wide 
+              ${status === "CLOSE" ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"} 
+              ring-1 ring-offset-2 ring-opacity-50 ring-white dark:ring-gray-600`}
+  onClick={() => openShop()}
+>
+  {status === "CLOSE" ? (
+    <>
+      <DoorOpen size={22} />
+      Open Shop
+    </>
+  ) : (
+    <>
+      <DoorClosed size={22} />
+      Close Shop
+    </>
+  )}
+</button>
+
         </div>
 
         {/* Stats Cards */}
@@ -125,6 +150,7 @@ const [status,setStatus] = useState("");
           ))}
         </div>
       </div>
+      {status === "CLOSE" && <ShopClosedPopup openShop={openShop} />}
     </div>
   );
 };

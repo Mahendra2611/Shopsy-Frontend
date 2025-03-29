@@ -124,13 +124,13 @@ const [availableCategories,setCategories] = useState([]);
     <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
       Category
     </label>
-    <div className="flex items-center border rounded-lg p-3 bg-gray-200 dark:bg-gray-700 mt-1">
+    <div className="flex overflow-y-auto items-center border rounded-lg p-3 bg-gray-200 dark:bg-gray-700 mt-1">
       <select
         id="category"
         name="category"
         value={formData.category}
         onChange={handleChange}
-        className=" text-[14px] w-[60%] md:w-full md:text-xl bg-transparent outline-none dark:bg-gray-900 text-gray-900 dark:text-white"
+        className=" text-[14px] w-[60%] md:w-full md:text-xl   bg-transparent outline-none dark:bg-gray-900 text-gray-900 dark:text-white"
         required
       >
         <option value="">Select Category</option>
@@ -148,10 +148,10 @@ const [availableCategories,setCategories] = useState([]);
     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
       Product Image
     </label>
-    <label className="flex items-center cursor-pointer bg-gray-300 dark:bg-gray-600 p-3 rounded-lg justify-center hover:bg-gray-400 dark:hover:bg-gray-500 mt-1">
+    <label className="flex items-center flex-col cursor-pointer bg-gray-300 dark:bg-gray-600 p-3 rounded-lg justify-center hover:bg-gray-400 dark:hover:bg-gray-500 mt-1">
       <Upload className="text-gray-700 dark:text-white mr-2" />
       <span className="text-gray-700 dark:text-white">Upload Product Image</span>
-      <input type="file" name="image" onChange={handleFileChange} className="hidden" required />
+      <input type="file" name="image" onChange={handleFileChange}  className="text-center m-auto" required />
     </label>
   </div>
 
