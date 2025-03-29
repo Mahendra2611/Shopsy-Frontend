@@ -14,7 +14,7 @@ const Products = () => {
   const navigate = useNavigate();
   const { callApi ,loading} = useAPI();
   const { products } = useSelector((state) => state.products);
-  const shopId = "65d8c8e2a4f3b6b4c8a54321";
+ 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -24,7 +24,7 @@ const Products = () => {
     console.log("Delete called");
     
     const response = await callApi({
-      url: `api/product/${product._id}/delete`,
+      url: `api/products/delete/${product._id}`,
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
@@ -34,7 +34,7 @@ const Products = () => {
       toast.success("Product deleted successfully!");
       navigate("/dashboard/products");
     } else {
-      toast.error("Failed to delete product. Please try again.");
+      //toast.error("Failed to delete product. Please try again.");
     }
     setShowConfirm(false);
     setShowDetails(false);
@@ -44,7 +44,7 @@ const Products = () => {
     const fetchProducts = async () => {
       console.log("called");
       const response = await callApi({
-        url: `api/product/${shopId}/products`,
+        url: `api/products`,
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -52,9 +52,9 @@ const Products = () => {
       if (response) {
         setSelectedCategory(response[0].category)
         dispatch(addProducts(response));
-        toast.success("Products loaded successfully!");
+        //toast.success("Products loaded successfully!");
       } else {
-        toast.error("Failed to fetch products. Please try again.");
+       // toast.error("Failed to fetch products. Please try again.");
       }
     };
     fetchProducts();
@@ -92,8 +92,8 @@ const Products = () => {
       </div>
       
 
-      <button 
-  className="fixed bottom-0  md:hidden transform translate-x-1/2  bg-blue-500 text-white px-4 py-1 rounded-t-lg shadow-lg  origin-bottom "
+      <button
+  className="fixed bottom-0 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-4 py-2 rounded-t-lg shadow-lg"
   onClick={() => setSidebarOpen(!sidebarOpen)}
 >
   {sidebarOpen ? "Close Sidebar" : "Open Sidebar"}
@@ -114,7 +114,7 @@ const Products = () => {
                 />
                 <h3 className="text-sm md:text-lg font-semibold mt-2 text-black dark:text-white">{product.name}</h3>
                 <p className="text-[13px] md:text-xl text-gray-600 dark:text-gray-300">Category: {product.category}</p>
-                <p className="text-[13px] md:text-xl text-gray-600 dark:text-gray-300">Price: ₹{product.price}</p>
+                <p className="text-[13px] md:text-xl text-gray-600 dark:text-gray-300">Price: ₹{product.salesPrice}</p>
                 <button
                   onClick={() => {setShowDetails(true),setProduct(product)}}
                   className="mt-3 w-full bg-blue-500 text-white p-1 md:py-2 rounded text-sm md:text-lg hover:bg-blue-600"

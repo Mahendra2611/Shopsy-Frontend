@@ -3,13 +3,12 @@ import { IoClose, IoTrash, IoPencil } from "react-icons/io5";
 
 
 const ProductDetails = ({product,handleDelete,showConfirm,setShowConfirm,navigate,loading}) => {
- console.log(product)
- console.log(handleDelete)
-console.log(showConfirm)
+//  console.log(product)
+//  console.log(handleDelete)
+// console.log(showConfirm)
   if (!product) {
     return <p className="text-center text-gray-600 dark:text-gray-300">Product not found.</p>;
   }
-  
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-96 relative">

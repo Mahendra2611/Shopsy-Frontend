@@ -8,7 +8,7 @@ const LowStock = () => {
 const {callApi,loading} = useAPI();
   useEffect(() => {
     const fetchLowStockProducts = async () => {
-      const data = await callApi({ url: "api/product/low-stock/65d8c8e2a4f3b6b4c8a54321" });
+      const data = await callApi({ url: "api/products/low-stock" });
       if (data) setProducts(data);
     };
 
@@ -25,7 +25,7 @@ const {callApi,loading} = useAPI();
       newQuantity: updatedQuantities[id],
     }));
 
-    const response = await callApi({ url: "api/product/update-quantities", method: "PUT", data: { products: updatedProducts } });
+    const response = await callApi({ url: "api/products/update-quantities", method: "PUT", data: { products: updatedProducts } });
 
     if (response) {
       setProducts((prev) =>
@@ -41,7 +41,7 @@ const {callApi,loading} = useAPI();
     return <Skeleton/>
   }
   return (
-    <div className="container mx-auto p-6 bg-background-light dark:bg-background-dark min-h-screen">
+    <div className=" p-6 bg-background-light dark:bg-background-dark min-h-screen">
       <h2 className="text-2xl font-bold mb-6 text-black dark:text-white">Low Stock Products</h2>
 
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">

@@ -2,9 +2,9 @@
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
  
 const OrderDetails = ({handleUpdateStatus,order}) => {
-  console.log("called")
- console.log(handleUpdateStatus)
- console.log(order)
+//   console.log("called")
+//  console.log(handleUpdateStatus)
+//  console.log(order)
   if (!order) {
     return <p className="text-center text-gray-500">Order not found.</p>;
   }
