@@ -87,7 +87,7 @@ const Login = () => {
    
     if (response) {
       
-      const owner = {"email":response?.email||"","name":response?.name||""}
+       const owner = {"email":response?.email||"","name":response?.name||"","id":response.id}
      
       localStorage.setItem("owner", JSON.stringify(owner));
       dispatch(addOwner({owner:owner}));
