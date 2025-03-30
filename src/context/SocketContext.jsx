@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { useDispatch } from "react-redux";
+import { useDispatch ,useSelector} from "react-redux";
 import { addNotification } from "../redux/NotificationSlice";
 import { updateOrder } from "../redux/OrderSlice";
 import { addLowStock } from "../redux/LowStockSlice";
@@ -10,14 +10,15 @@ export const SocketContext = createContext();
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
   const dispatch = useDispatch();
-
+  const {id} = useSelector((state)=>state?.auth?.owner || null)
   useEffect(() => {
-    const owner = { shopId: "67c6f385a13214cb0b129350" };
-    if (!owner?.shopId) return;
+    
+    if (!id) return;
 
-    const newSocket = io("http://localhost:3000", { withCredentials: true });
+   //const newSocket = io("http://localhost:3000", { withCredentials: true });
+   const newSocket = io("https://shopsy-backend-gilt.vercel.app", { withCredentials: true });
 
-    newSocket.emit("joinShop", owner.shopId);
+    newSocket.emit("joinShop", id);
 
     newSocket.on("newOrder", (data) => {
       console.log("New order received:", data);
