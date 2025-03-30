@@ -10,8 +10,8 @@ const useAPI = () => {
         setLoading(true);
         setError(null);
 
-         url = `http://localhost:3000/${url}`;
-        //url = `https://shopsy-backend-one.vercel.app/${url}`;
+        // url = `http://localhost:3000/${url}`;
+        url = `https://shopsy-backend-one.vercel.app/${url}`;
         
         console.log(url);
 
