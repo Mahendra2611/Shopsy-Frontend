@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react"; // Import PersistGate
 import Store from "./redux/Store";
 import Routing from "./Routing";
-import { SocketProvider } from "./context/SocketContext";
+import { SocketProvider } from "./context/socketContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
  

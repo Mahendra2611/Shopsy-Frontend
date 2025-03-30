@@ -11,7 +11,9 @@ const useAPI = () => {
         setError(null);
 
         // url = `http://localhost:3000/${url}`;
-        url = `https://shopsy-backend-one.vercel.app/${url}`;
+        // url = `https://shopsy-backend-one.vercel.app/${url}`;
+        url = `https://shopsy-backend-production.up.railway.app/${url}`;
+        
         
         console.log(url);
 
