@@ -20,7 +20,7 @@ import PublicRoute from './components/auth/PublicRoute'
 import ProtectedRoute from './components/auth/ProtectedRoute'
 import LowStock from './pages/LowStock.jsx'
 const Routing = () => {
-    
+     
     const BrowserRouter  = createBrowserRouter([
         {
             path:"/",
