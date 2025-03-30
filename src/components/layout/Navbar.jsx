@@ -11,7 +11,7 @@ const Navbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
     const { email, name } = useSelector((state) => state?.auth?.owner || {},shallowEqual);
-    console.log(name)
+   
     const dispatch = useDispatch();
     const navigate = useNavigate();
 

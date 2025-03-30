@@ -9,7 +9,7 @@ const AuthSlice = createSlice({
     initialState: { owner: storedOwner ,category:[]},
     reducers: {
         addOwner: (state, action) => {
-            console.log("add owner",action.payload);
+            //console.log("add owner",action.payload);
             state.owner = action.payload;
            // state.category = action.payload.category
             // Store updated owner in localStorage
