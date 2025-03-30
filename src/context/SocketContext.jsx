@@ -39,13 +39,15 @@ export const SocketProvider = ({ children }) => {
         message: data.message, 
       }));
     });
-
+    newSocket.on("Logged-out",()=>{
+      newSocket.emit("disconnect",id);
+    })
     setSocket(newSocket);
 
     return () => {
       newSocket.disconnect();
     };
-  }, [dispatch]);
+  }, [dispatch,id]);
 
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>
