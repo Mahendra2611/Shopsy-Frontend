@@ -72,9 +72,17 @@ const RegisterShop = () => {
   };
   
   const handleFileChange = (e) => {
-    setFormData((prev) => ({ ...prev, shopImage: e.target.files[0] }));
+    const file = e.target.files[0];
+  
+    if (file) {
+      if (file.size > 500 * 1024) { // 500KB limit
+        toast.error("File size must be less than 500KB!");
+        return;
+      }
+  
+      setFormData((prev) => ({ ...prev, shopImage: file }));
+    }
   };
-
   const validateForm = () => {
     if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
       toast.error("Invalid email format");

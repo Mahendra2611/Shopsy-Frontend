@@ -65,15 +65,23 @@ const OrderDetails = ({handleUpdateStatus,order,setViewDetails}) => {
         >
           <FaTimesCircle className="h-5 w-5" /> Cancel Order
         </button>
-      </div>):( <div className="flex justify-center items-center mt-2">
+      </div>):(order.status === "Cancelled")?( <div className="flex justify-center items-center mt-2">
         <button
          
-          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-green-700"
+          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg shadow-md "
         >
-          <FaTimesCircle className="h-5 w-5" /> order has been cancelled
+          <FaTimesCircle className="h-5 w-5" /> Order has been cancelled
         </button>
         </div>
-        ) }
+        ) :( <div className="flex justify-center items-center mt-2">
+          <button
+           
+            className="flex items-center gap-2 px-4 py-2  text-white rounded-lg shadow-md bg-green-700"
+          >
+            <FaCheckCircle className="h-5 w-5" /> Order has been Delivered
+          </button>
+          </div>
+          )}
     </div> 
     </div>
   );

@@ -7,15 +7,17 @@ import useAPI from "../../hooks/useAPI";
 const NotificationBell = () => {
   const dispatch = useDispatch();
   const notifications = useSelector((state) => state.notification.notifications);
+  console.log("Notification ")
   const [isOpen, setIsOpen] = useState(false);
 const {callApi} = useAPI();
   useEffect(() => {
     const fetchNotifications = async () => {
       const data = await callApi({ 
-        url: "api/notifications/65d8c8e2a4f3b6b4c8a54321" ,
+        url: "api/notifications/shopkeeper" ,
         method: "GET",
         headers: { "Content-Type": "application/json" },
     });
+    console.log(data)
       if (data) {
         dispatch(setNotifications(data)); // Store notifications in Redux
       }

@@ -16,7 +16,9 @@ export const SocketProvider = ({ children }) => {
     if (!id) return;
 
    //const newSocket = io("http://localhost:3000", { withCredentials: true });
-   const newSocket = io("https://shopsy-backend-one.vercel.app", { withCredentials: true });
+
+   const newSocket = io("https://shopsy-backend-gilt.vercel.app", { withCredentials: true });
+
 
     newSocket.emit("joinShop", id);
 
@@ -37,13 +39,15 @@ export const SocketProvider = ({ children }) => {
         message: data.message, 
       }));
     });
-
+    newSocket.on("Logged-out",()=>{
+      newSocket.emit("disconnect",id);
+    })
     setSocket(newSocket);
 
     return () => {
       newSocket.disconnect();
     };
-  }, [dispatch]);
+  }, [dispatch,id]);
 
   return (
     <SocketContext.Provider value={socket}>{children}</SocketContext.Provider>

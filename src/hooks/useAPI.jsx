@@ -25,7 +25,7 @@ const useAPI = () => {
             });
 
             console.log(response);
-            setLoading(false);
+           // setLoading(false);
             if (response && (response.status === 201 || response.status === 200)) {
                 return response.data;
             } else {
@@ -36,7 +36,7 @@ const useAPI = () => {
             const errorMessage = err?.response?.data?.message||err?.response?.data?.errors[0] || "Something went wrong";
             setError(errorMessage);
             toast.error(errorMessage); 
-            setLoading(false);
+           // setLoading(false);
             return null;
         } finally {
             setLoading(false);
