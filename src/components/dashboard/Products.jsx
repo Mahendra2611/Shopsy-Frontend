@@ -47,10 +47,10 @@ const Products = () => {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
-     // console.log(response);
+     console.log(response);
       if (response) {
-        setSelectedCategory(response[0].category)
-        dispatch(addProducts(response));
+        setSelectedCategory(response?.products[0]?.category || "")
+        dispatch(addProducts(response?.products||[]));
   
       } 
     };
