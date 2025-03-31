@@ -6,7 +6,7 @@ const storedOwner = owner
 console.log(storedOwner)
 const AuthSlice = createSlice({
     name: "auth",
-    initialState: { owner: storedOwner ,category:[]},
+    initialState: { owner: storedOwner ,category:[],loading:false},
     reducers: {
         addOwner: (state, action) => {
             //console.log("add owner",action.payload);
