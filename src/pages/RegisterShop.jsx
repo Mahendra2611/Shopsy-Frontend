@@ -3,9 +3,9 @@ import useAPI from '../hooks/useAPI';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaStore, FaMapMarkerAlt, FaList, FaImage, FaMicrophone } from "react-icons/fa";
 import { useDispatch } from 'react-redux';
-import { addShop } from '../redux/ShopSlice';
 import toast from 'react-hot-toast';
-
+import { addOwner } from '../redux/AuthSlice';
+import { availableCategories } from '../utils/helpers.js';
 const RegisterShop = () => {
   const [formData, setFormData] = useState({
     shopName: '',
@@ -14,13 +14,17 @@ const RegisterShop = () => {
     email: '',
     mobileNumber: '',
     password: '',
-    shopCategory: '',
-    itemCategories: '',
-    shopImage: null,
+    shopCategory:'',
+    itemCategories: [],
+    shopImage:'',
     shopLocation: { type: 'Point', coordinates: [0, 0] },
+    openingTime:'',
+    closingTime:''
+
   });
 
   const [listeningField, setListeningField] = useState(null);
+  const [newCategory, setNewCategory] = useState("");
 
   const dispatch = useDispatch();
   const { callApi, loading } = useAPI();
@@ -28,9 +32,23 @@ const RegisterShop = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    //console.log(`${name} ${value}`)
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+  const addCategory = () => {
+    if (newCategory && !formData.itemCategories.includes(newCategory)) {
+      setFormData({ ...formData, itemCategories: [...formData.itemCategories, newCategory] });
+    }
+    setNewCategory("");
+  };
 
+  // Handle Category Removal
+  const removeCategory = (category) => {
+    setFormData({
+      ...formData,
+      itemCategories: formData.itemCategories.filter((cat) => cat !== category),
+    });
+  };
 
 
   const fetchLocation = () => {
@@ -72,7 +90,7 @@ const RegisterShop = () => {
     }
     return true;
   };
-
+ // console.log(formData)
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -81,22 +99,29 @@ const RegisterShop = () => {
     Object.entries(formData).forEach(([key, value]) => {
       formDataToSend.append(key, value);
     });
-
+    console.log(formData)
     try {
       const response = await callApi({
         url: "api/owner/register",
         method: "POST",
-        data: formDataToSend
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" }
       });
 
       if (response) {
-        dispatch(addShop(response.shop));
-        navigate("/dashboard");
+        toast.success("Login successful!");
+      console.log(response)
+      const owner = {"email":response.owner.email,"name":response.owner.ownerName}
+      //console.log(owner);
+      localStorage.setItem("owner", JSON.stringify(owner));
+      dispatch(addOwner(owner));
+     
+      navigate("/dashboard");
       } else {
         toast.error("Error registering shop");
       }
     } catch (err) {
-      toast.error("Error registering shop");
+      toast.error(err?.message||"Error while registring") ;
     }
   };
 
@@ -119,8 +144,14 @@ const RegisterShop = () => {
       <div className="w-full max-w-md p-4 sm:p-8 bg-white dark:bg-gray-800 shadow-lg rounded-lg">
         <h2 className="text-2xl font-bold text-center mb-6 text-black dark:text-white">Register Shop</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {['shopName', 'shopAddress', 'ownerName', 'email', 'mobileNumber', 'shopCategory', 'itemCategories'].map((field, index) => (
-            <div key={index} className="flex items-center border rounded p-2 bg-gray-100 dark:bg-gray-700">
+          {['shopName', 'shopAddress', 'ownerName', 'email', 'mobileNumber'].map((field, index) => 
+          { const formattedLabel = field
+           .replace(/([A-Z])/g, ' $1') 
+           .replace(/^./, (char) => char.toUpperCase()); 
+          return (
+            <div key={index}>
+              <label className="block text-gray-700 dark:text-gray-300">{formattedLabel}</label>
+            <div  className="flex items-center border rounded p-2 bg-gray-100 dark:bg-gray-700">
               <input
                 type="text"
                 name={field}
@@ -134,8 +165,85 @@ const RegisterShop = () => {
                 <FaMicrophone className={listeningField === field ? "text-red-500 animate-pulse" : "text-gray-500"} />
               </button>
             </div>
-          ))}
+            </div>
+          )})}
 
+          {/* shop category */}
+          <div>
+              <label className="block text-gray-700 dark:text-gray-300">Shop Category</label>
+              <select
+                name="shopCategory"
+                value={formData.shopCategory}
+                onChange={handleChange}
+                className="w-full p-2 border rounded text-black dark:text-white bg-gray-100 dark:bg-gray-800"
+              >
+                <option key={""} value={""}>
+                  {"Select Category"}
+                  </option>
+                {availableCategories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
+            {/* Opening and closing Timing */}
+            <div className="block text-gray-700 dark:text-gray-300">
+            <label className="block text-gray-700 dark:text-gray-300">Opening Time</label>
+            <input 
+  type="time" 
+  name="openingTime" 
+  onChange={(e) => setFormData({ ...formData, openingTime: e.target.value })} 
+  required 
+  className="border p-2 rounded w-full"
+/>
+<label className="block text-gray-700 dark:text-gray-300">Closing Time</label>
+<input 
+  type="time" 
+  name="closingTime" 
+  onChange={(e) => setFormData({ ...formData, closingTime: e.target.value })} 
+  required 
+  className="border p-2 rounded w-full mt-2"
+/>
+
+            </div>
+
+<div>
+              <label className="block text-gray-700 dark:text-gray-300">Product Categories</label>
+              <div className="flex flex-wrap gap-2">
+                {formData.itemCategories.map((category, index) => (
+                  <span
+                    key={index}
+                    className="bg-blue-500 text-white px-2 py-1 rounded flex items-center space-x-1"
+                  >
+                    {category}
+                    <button
+                      type="button"
+                      className="ml-1 text-sm text-white hover:text-red-500"
+                      onClick={() => removeCategory(category)}
+                    >
+                      ✕
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="flex mt-2 dark:text-white">
+                <input
+                  type="text"
+                  value={newCategory}
+                  onChange={(e) => setNewCategory(e.target.value)}
+                  placeholder="Add new category"
+                  className="w-full p-2 border  rounded bg-gray-100 dark:bg-gray-800"
+                />
+                <button
+                  type="button"
+                  onClick={addCategory}
+                  className="ml-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
           {/* Password Field - No Mic */}
           <div className="flex items-center border rounded p-2 bg-gray-100 dark:bg-gray-700">
             <input
@@ -180,10 +288,10 @@ const RegisterShop = () => {
 
 
           {/* File Upload */}
-          <label className="flex items-center cursor-pointer bg-gray-200 dark:bg-gray-600 p-2 rounded justify-center">
+          <label className="flex flex-col items-center cursor-pointer bg-gray-200 dark:bg-gray-600 p-2 rounded justify-center">
             <FaImage className="text-gray-600 dark:text-white mr-2" />
             <span className="text-gray-700 dark:text-white">Upload Shop Image</span>
-            <input type="file" name="shopImage" onChange={handleFileChange} className="hidden" required />
+            <input type="file" name="shopImage" onChange={handleFileChange} className="text-center m-auto text-black dark:text-white" required />
           </label>
 
           {/* Submit Button */}

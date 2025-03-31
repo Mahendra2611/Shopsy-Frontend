@@ -5,16 +5,14 @@ import { useEffect } from "react"
 import {Toaster} from "react-hot-toast"
 function App() {
  
- useEffect(()=>{
- 
- },[])
+
   return (
     <div>
         <Toaster position="top-right" reverseOrder={false} />
     <Navbar/>
     
     <Outlet/>
-  </div>
+  </div> 
   )
 }
 
