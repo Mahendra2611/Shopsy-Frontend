@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Input from "../common/Input";
 import useAPI from "../../hooks/useAPI";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addOwner } from "../../redux/AuthSlice";
 
@@ -149,6 +149,17 @@ const Login = () => {
             )}
           </button>
         </form>
+        <div className="flex flex-col items-center mt-4">
+          <Link to="/forgot-password" className="self-end text-sm text-blue-500 dark:text-blue-400 hover:underline">
+            Forgot Password?
+          </Link>
+          <p className="text-center text-gray-700 dark:text-gray-300 mt-3">
+            Don't have an account? {" "}
+            <a href="/signup" className="text-blue-600 dark:text-blue-400 font-semibold hover:underline">
+              Sign Up
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   );
