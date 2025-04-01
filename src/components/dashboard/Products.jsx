@@ -48,9 +48,9 @@ const Products = () => {
         headers: { "Content-Type": "application/json" },
       });
      // console.log(response);
-     if (response) {
-        setSelectedCategory(response?.products[0]?.category || "")
-        dispatch(addProducts(response?.products||[]));
+      if (response) {
+        setSelectedCategory(response[0].category)
+        dispatch(addProducts(response));
   
       } 
     };
