@@ -17,7 +17,7 @@ export const SocketProvider = ({ children }) => {
 
    //const newSocket = io("http://localhost:3000", { withCredentials: true });
 
-   const newSocket = io("https://shopsy-backend-production.up.railway.app", { withCredentials: true });
+   const newSocket = io("https://localmart-backend.onrender.com", { withCredentials: true });
 
 
     newSocket.emit("joinShop", id);
