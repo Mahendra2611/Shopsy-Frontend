@@ -12,7 +12,7 @@ const useAPI = () => {
 
         // url = `http://localhost:3000/${url}`;
         // url = `https://shopsy-backend-one.vercel.app/${url}`;
-       url = `https://shopsy-backend-production.up.railway.app/${url}`;
+       url = `https://localmart-backend.onrender.com/${url}`;
         
         
         console.log(url);
