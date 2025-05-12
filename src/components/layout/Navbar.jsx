@@ -56,7 +56,7 @@ const Navbar = () => {
         <nav className="sticky top-0  z-50 flex items-center justify-between p-4 border-b-2 border-b-cyan-900 dark:border-b-cyan-50 bg-background-light dark:bg-background-dark shadow-md">
             {/* Logo */}
             <Link to="/" className="text-xl font-bold text-heading-light dark:text-heading-dark">
-                ShopEase
+                LocalMart
             </Link>
             {isLoggedIn && <NotificationBell />}
             {/* Buttons */}
